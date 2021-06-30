@@ -1,4 +1,5 @@
 from .client import orm_api
+from .prompt_execution import InteletExecution
 from jsonapi_requests.orm import ApiModel, AttributeField, RelationField, repositories
 
 
@@ -52,7 +53,7 @@ class Intelet(ApiModel):
         intelet_input = f'{{"input":"{input}"}}'
         execute_path = self.endpoint.path + '/execute'
         api_response = self.endpoint.requests.post(api_path=execute_path, data=intelet_input)
-        return api_response.payload
+        return InteletExecution(intelet_execution_id=api_response.payload['intelet_execution_id'])
 
     def _get_relation(self, attr):
         r = getattr(self, attr)
