@@ -7,6 +7,11 @@ from requests.auth import AuthBase
 
 ROOT_URL = os.getenv('ROOT_URL', 'https://api.mantiumai.com')
 
+
+def is_none_or_empty(value):
+    return not (value and value.strip())
+
+
 class BearerAuth(AuthBase):
     auth_url = ROOT_URL + '/auth/login/access/token'
 
@@ -14,11 +19,6 @@ class BearerAuth(AuthBase):
         self.token = os.getenv('MANTIUM_TOKEN')
         self.user = os.getenv('MANTIUM_USER')
         self.password = os.getenv('MANTIUM_PASSWORD')
-
-        if self.token is None:
-            if not self.user and self.password:
-                raise ValueError('Make sure both MANTIUM_USER and MANTIUM_PASS or alternatively just '
-                                 'MANTIUM_TOKEN are set in your environment variables.')
 
     def __call__(self, r):
         self.token = self.get_token()
@@ -44,6 +44,11 @@ class BearerAuth(AuthBase):
             return False
 
     def get_token(self):
+        if is_none_or_empty(self.token):
+            if is_none_or_empty(self.user) or is_none_or_empty(self.password):
+                raise ValueError('Make sure both MANTIUM_USER and MANTIUM_PASS are set in your env vars. Alternatively you can just set '
+                                    'MANTIUM_TOKEN.')
+
         if not self.check_expire_claim():
             return self.token
         else:
