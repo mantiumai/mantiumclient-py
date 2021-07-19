@@ -1,6 +1,6 @@
 ## Mantium API Client Library
 
-[![Build Status](https://travis-ci.org/mantiumai/mantiumclient-py.svg?branch=master)](https://travis-ci.org/mantiumai/mantiumclient-py)
+[![Build Status](https://travis-ci.com/mantiumai/mantiumclient-py.svg?branch=main)](https://travis-ci.com/mantiumai/mantiumclient-py)
 
 This software is provided as a way to include Mantium API functionality in your own Python software.
 
