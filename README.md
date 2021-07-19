@@ -12,7 +12,7 @@ Install with pip:
 pip install mantiumclient
 ```
 
-### Version 0.0 Release Notes 
+### Version 0.1 Release Notes 
 * Initial beta release, expect some issues.
 * Intelet endpoints are currently undergoing some breaking changes and may not function.
 
