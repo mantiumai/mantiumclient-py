@@ -14,7 +14,7 @@ decoded_jwt = {
     'nickname':
     'rick', 
     'name': 'Test User', 
-    'picture': 'https://s.gravatar.com/avatar/31201667409165d2ebb4472d7e01ccd2?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Ftu.png',
+    'picture': 'https://s.gravatar.com/avatar/31201667409165d2ebb4472d7e01ccd2?s=480&r=pg',
     'updated_at': '2021-03-24T18:11:02.938Z',
     'email': 'test@fakesite.com', 
     'email_verified': True,
@@ -64,7 +64,6 @@ class BasicTests(unittest.TestCase):
 
     @mock.patch.dict(
         os.environ, {
-                'ROOT_URL': 'https://api.fakesite.com/',
                 'MANTIUM_USER': "user_id", 
                 'MANTIUM_PASSWORD': 'password'
             }
@@ -77,7 +76,7 @@ class BasicTests(unittest.TestCase):
         self.assertEqual(target.password, 'password')
 
         self.assertIsNone(target.token)
-        self.assertEqual(target.auth_url, 'https://api.fakesite.com/auth/login/access/token')
+        self.assertEqual(target.auth_url, 'https://api.mantiumai.com/auth/login/access/token')
 
     @mock.patch('requests.post', side_effect=mocked_requests_post)
     @mock.patch.dict(
