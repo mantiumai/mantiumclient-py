@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+# Copyright (c) 2021 Mantium, Inc. All rights reserved.
+# Please refer to our terms for more information:
+#
+#     https://mantiumai.com/terms-of-use/
 language: python
 python:
 - '3.6'
