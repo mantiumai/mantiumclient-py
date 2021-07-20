@@ -9,6 +9,7 @@ script:
 - python setup.py test
 - python setup.py sdist
 deploy:
+  provider: pypi
   username: "__token__"
   password:
     secure: o33ePzgUR3udj3S/k2HctpVgN98P41wOxvOYiC2muxb0JIOcUR00HIE30kyvD+CXJC3/u/7vtm5vQLM1Dv/HjICzRiZGMbgJ+Xx3G2gJEV4Neg3yKjxdniTUVWMGASPNVIhUbgHCQ922AYCnjrSZuRrA0V7almSx/Qjk//j6qGYPwQ8T8SvgNB+MyP2dtgzMZDSDGExPNZZC2U76+xwDepqEtkiLC47cHpjLB+obrQLcymUXo7OztAt0Jn4nL4wd2kV4aGVfF681+Ij3JKOU3pCndPFfNZhe3yGSc0F7MWAcw+1zO5I0zbQk9e7dy8MmLdl1djCPAYijthLY5BDbqq40KH3E6sue3ZBbu7DGWgzdSU0EmJa/bny1p/7Ai5JeNe1yGavVoHTIif4U8RJcGEDq1wI8JXcg0LU/vJuqlhg9LIrq1JmrHXcgJaNECUGxYp/DcHbSE4Wg5HAXOdwu7tWO/o/7aRU+syFCJfg4HxlaJ095ZoQ/JVCGxlnzjaT+ua94e0ak7GEw5F4pdpn18fm8T48qQhA9cvolvFRmo/xkscfjYzeazT8+T9blC5CBHlrZGWKPJa/dLNMdaGqghpGO6AHOdmYgFUZYv4EoAFlmXOCuStDLzlQClrOKAblHLR4Af/Bb69vQSGyZPuURgVhgq3KfLwb8hdDOHWZrcpE=
