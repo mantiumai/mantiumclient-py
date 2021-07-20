@@ -24,7 +24,7 @@ class PromptExecution:
         if obj:
             self.prompt_execution_id = obj['prompt_execution_id']
             self.prompt_id = obj['prompt_id']
-            self.input = obj['output']
+            self.input = obj['input']
             self.output = obj['output']
             self.reason = obj['reason']
             self.status = obj['status']
@@ -77,8 +77,8 @@ class InteletExecution:
         self.intelet_execution_id = intelet_execution_id
         if obj:
             self.intelet_execution_id = obj['intelet_execution_id']
-            self.prompt_id = obj['intelet_id']
-            self.input = obj['output']
+            self.intelet_id = obj['intelet_id']
+            self.input = obj['input']
             self.output = obj['output']
             self.reason = obj['reason']
             self.status = obj['status']
