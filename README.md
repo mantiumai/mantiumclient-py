@@ -9,7 +9,7 @@ You can read about using the Mantium API at [https://developer.mantiumai.com/](h
 Install with pip:
 
 ```bash
-pip install mantiumclient
+pip install mantiumapi
 ```
 
 ### Version 0.1 Release Notes 
