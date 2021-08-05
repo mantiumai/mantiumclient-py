@@ -28,10 +28,13 @@ class PromptExecution:
             self.output = obj['output']
             self.reason = obj['reason']
             self.status = obj['status']
+            self.error = obj['error']
+            self.warning_message = obj['warning_message']
             if 'hitl_info' in obj:
                 self.hitl_info = obj['hitl_info']
             else:
                 self.hitl_info = '{}'
+                
         if not hasattr(self, 'status'):
             self.refresh()
 
