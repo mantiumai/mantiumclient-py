@@ -29,7 +29,10 @@ class PromptExecution:
             self.reason = obj['reason']
             self.status = obj['status']
             self.error = obj['error']
-            self.warning_message = obj['warning_message']
+            if 'warning_message' in obj:
+                self.warning_message = obj['warning_message']
+            else:
+                self.warning_message = ''
             if 'hitl_info' in obj:
                 self.hitl_info = obj['hitl_info']
             else:
@@ -85,6 +88,7 @@ class InteletExecution:
             self.output = obj['output']
             self.reason = obj['reason']
             self.status = obj['status']
+            self.error = obj['error']
             self.executed_prompts = []
             self.pending_prompts = obj['pending_prompts']
             self.results = obj['results']
