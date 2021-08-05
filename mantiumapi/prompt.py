@@ -53,10 +53,8 @@ class Prompt(ApiModel):
     ai_method = AttributeField('ai_method')
     prompt_parameters = AttributeField('prompt_parameters')
     created_at = AttributeField('created_at')
-    updated_at = AttributeField('updated_at')
-    created_by = AttributeField('created_by')
-    updated_by = AttributeField('updated_by')
-
+    last_activity = AttributeField('last_activity')
+    
     #intelets = RelationField('intelets')
     tags = RelationField('tags')
 
