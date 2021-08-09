@@ -25,8 +25,13 @@ DEPENDENCIES = open('requirements.txt', 'r').read().split('\n')
 with open('README.md', 'r') as fh:
     long_description = fh.read()
 
+try:
+    build_version=pkg_resources.require("mantiumapi")[0].version
+except:
+    build_version= '0.1.' + os.getenv('TRAVIS_BUILD_NUMBER', 'unknown')
+
 setuptools.setup(name='mantiumapi',
-    version = pkg_resources.require("mantiumapi")[0].version,
+    version=build_version,
     description='Python Client for the Mantium API',
     long_description='This software is provided as a way to include the Mantium API functionality in your own Python '
                      'software. You can read about the Mantium API at https://developer.mantiumai.com/',
