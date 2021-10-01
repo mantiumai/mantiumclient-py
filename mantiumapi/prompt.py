@@ -22,7 +22,7 @@ from jsonapi_requests.orm import ApiModel, AttributeField, repositories, Relatio
 
 from .client import orm_api
 from .intelet import Intelet
-from .prompt_execution import PromptExecution
+from .execute import PromptExecution
 
 
 class Prompt(ApiModel):

@@ -17,7 +17,7 @@
 #     https://mantiumai.com/terms-of-use/
 #
 from .client import orm_api
-from .prompt_execution import InteletExecution
+from .execute import InteletExecution
 from jsonapi_requests.orm import ApiModel, AttributeField, RelationField, repositories
 
 
