@@ -22,6 +22,8 @@ from .intelet import Intelet
 from .log import Log
 from .intelet_prompt import InteletPrompt
 from .execute import PromptExecution, InteletExecution
+from .ai_engines import AiEngine
+from .licenses import License
 from jsonapi_requests.data import (
     Record,
     JsonApiObject,
@@ -33,7 +35,18 @@ from jsonapi_requests.data import (
 )
 from jsonapi_requests import data
 
-__all__ = ['Prompt', 'Tag', 'Intelet', 'Log', 'InteletPrompt', 'PromptExecution', 'InteletExecution']
+__all__ = [
+    'Prompt', 
+    'PublicPrompt', 
+    'Tag', 
+    'Intelet', 
+    'Log', 
+    'InteletPrompt', 
+    'PromptExecution', 
+    'InteletExecution', 
+    'AiEngine'
+    'License'
+    ]
 
 
 class MJsonApiResponse(Record):
