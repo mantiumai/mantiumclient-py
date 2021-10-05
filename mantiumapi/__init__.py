@@ -21,7 +21,7 @@ from .tag import Tag
 from .intelet import Intelet
 from .log import Log
 from .intelet_prompt import InteletPrompt
-from .prompt_execution import PromptExecution, InteletExecution
+from .execute import PromptExecution, InteletExecution
 from jsonapi_requests.data import (
     Record,
     JsonApiObject,
