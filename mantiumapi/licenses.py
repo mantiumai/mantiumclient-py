@@ -17,7 +17,7 @@ class License(ApiModel):
     """
 
     class Meta:
-        path = 'license'
+        type = 'license'
         api = orm_api
         
 
