@@ -24,6 +24,7 @@ from .intelet_prompt import InteletPrompt
 from .execute import PromptExecution, InteletExecution
 from .ai_engines import AiEngine
 from .license import License
+from .organization import Organization
 from jsonapi_requests.data import (
     Record,
     JsonApiObject,
