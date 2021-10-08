@@ -25,6 +25,7 @@ from .execute import PromptExecution, InteletExecution
 from .ai_engines import AiEngine
 from .license import License
 from .organization import Organization
+from .files import Files
 from jsonapi_requests.data import (
     Record,
     JsonApiObject,
@@ -47,6 +48,7 @@ __all__ = [
     'InteletExecution', 
     'AiEngine'
     'License'
+    'Files'
     ]
 
 
