@@ -23,7 +23,7 @@ from .log import Log
 from .intelet_prompt import InteletPrompt
 from .execute import PromptExecution, InteletExecution
 from .ai_engines import AiEngine
-from .licenses import License
+from .license import License
 from jsonapi_requests.data import (
     Record,
     JsonApiObject,
