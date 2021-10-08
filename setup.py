@@ -24,7 +24,7 @@ DEPENDENCIES = open('requirements.txt', 'r').read().split('\n')
 with open('README.md', 'r') as fh:
     long_description = fh.read()
 
-with open('publish-test-25/version.py', 'r', encoding='utf-8') as f:
+with open('mantiumapi/version.py', 'r', encoding='utf-8') as f:
     version = re.search(r"^__version__\s*=\s*'(.*)'$",
                         f.read(), flags=re.MULTILINE).group(1)
 
