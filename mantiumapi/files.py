@@ -77,12 +77,15 @@ class Files(ApiModel):
                 )
 
     @classmethod
-    def delete(id):
-        pass
-
+    def delete(cls, id):
+        delete_endpoint = f'files/{id}'
+        orm_api.endpoint(delete_endpoint).delete()
+       
 
 class File:
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
+    def delete(self):
+        Files.delete(self.id)
