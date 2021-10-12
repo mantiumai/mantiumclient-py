@@ -26,6 +26,7 @@ from .ai_engines import AiEngine
 from .license import License
 from .organization import Organization
 from .files import Files
+from .apikey import APIKey
 from jsonapi_requests.data import (
     Record,
     JsonApiObject,
@@ -38,17 +39,18 @@ from jsonapi_requests.data import (
 from jsonapi_requests import data
 
 __all__ = [
-    'Prompt', 
-    'PublicPrompt', 
+    'Prompt',
     'Tag', 
     'Intelet', 
     'Log', 
     'InteletPrompt', 
     'PromptExecution', 
     'InteletExecution', 
-    'AiEngine'
-    'License'
-    'Files'
+    'AiEngine',
+    'License',
+    'Organization',
+    'Files',
+    'APIKey'
     ]
 
 
