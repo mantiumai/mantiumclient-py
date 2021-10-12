@@ -22,9 +22,10 @@ import time
 import jwt
 from jsonapi_requests.orm import OrmApi
 from requests.auth import AuthBase
+from .version import __version__
 
 ROOT_URL = os.getenv('ROOT_URL', 'https://api.mantiumai.com')
-
+version = __version__
 
 def is_none_or_empty(value):
     return not (value and value.strip())
@@ -41,6 +42,7 @@ class BearerAuth(AuthBase):
     def __call__(self, r):
         self.token = self.get_token()
         r.headers['authorization'] = 'Bearer ' + self.token
+        r.headers['User-Agent'] = f'MantiumClient/py-{version}'
         return r
 
     def check_expire_claim(self):
@@ -87,7 +89,7 @@ orm_api = OrmApi.config(
     {
         'API_ROOT': ROOT_URL + '/v1', 
         'AUTH': BearerAuth(), 
-        'VALIDATE_SSL': True, 
+        'VALIDATE_SSL': False, 
         'TIMEOUT': 5, 
         'APPEND_SLASH': False
     }
