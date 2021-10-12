@@ -43,31 +43,35 @@ class Prompt(ApiModel):
         api = orm_api
 
     prompt_id = AttributeField('prompt_id')
-    name = AttributeField('name')
     organization_id = AttributeField('organization_id')
+    name = AttributeField('name')
     description = AttributeField('description')
-    prompt_text = AttributeField('prompt_text')
-    status = AttributeField('status')
-    ai_provider = AttributeField('ai_provider')
-    default_engine = AttributeField('default_engine')
-    ai_method = AttributeField('ai_method')
-    prompt_parameters = AttributeField('prompt_parameters')
     created_at = AttributeField('created_at')
+    prompt_text = AttributeField('prompt_text')
+    deploy_scope = AttributeField('deploy_scope')
+    deploy_date = AttributeField('deploy_date')
+    ai_provider_approved = AttributeField('ai_provider_approved')
+    adults_only = AttributeField('adults_only')
+    ai_method = AttributeField('ai_method')
+    ai_provider = AttributeField('ai_provider')
+    intelets = AttributeField('intelets')
+    default_engine = AttributeField('default_engine')
+    ai_engine_id = AttributeField('ai_engine_id')
+    status = AttributeField('status')
+    prompt_parameters = AttributeField('prompt_parameters')
     last_activity = AttributeField('last_activity')
+    deploy_name = AttributeField('deploy_name')
+    deploy_description = AttributeField('deploy_description')
+    deploy_placeholder = AttributeField('deploy_placeholder')
+    deploy_author_name = AttributeField('deploy_author_name')
+    deploy_author_contact = AttributeField('deploy_author_contact')
+    deploy_type = AttributeField('deploy_type')
+    deploy_allow_input = AttributeField('deploy_allow_type')
+    deploy_status = AttributeField('deploy_status')    
+    last_successful_run = AttributeField('last_successful_run')
     
     #intelets = RelationField('intelets')
     tags = RelationField('tags')
-
-    @classmethod
-    def get_list(cls, **kwargs):
-        response = orm_api.endpoint(cls.endpoint_path()).get(**kwargs)
-        return cls.from_response_content(response.content)
-
-    @classmethod
-    def get_result(cls, prompt_execution_id):
-        result_path = f'prompt/result/{prompt_execution_id}'
-        api_response = orm_api.endpoint(result_path).get()
-        return api_response.payload
 
     def execute(self, input):
         """Executes a prompt using the given input
@@ -99,38 +103,19 @@ class Prompt(ApiModel):
         return relations
 
     def update(self):
-        modified_object = {
-            'name': self.name,
-            'ai_provider': self.ai_provider,
-            'status': self.status,
-            'description': self.description,
-            'prompt_text': self.prompt_text,
-            'ai_method': self.ai_method,
-            'default_engine': self.default_engine,
-            'prompt_parameters': self.prompt_parameters,
-            'intelets': self._get_relation('intelets'),
-        }
-
-        patch_path = f'prompt/{self.id}'
-        api_response = orm_api.endpoint(patch_path).patch(json=modified_object)
+        object = {}
+        for k,_ in self.raw_object.attributes.items():
+            object[k] = self.raw_object.attributes[k]
+        api_response = self.endpoint.patch(json=object)
         if api_response.status_code == 200 and api_response.content.data:
             self.raw_object = api_response.content.data
 
     def create(self):
-        modified_object = {
-            'name': self.name,
-            'ai_provider': self.ai_provider,
-            'status': self.status,
-            'description': self.description,
-            'prompt_text': self.prompt_text,
-            'ai_method': self.ai_method,
-            'default_engine': self.default_engine,
-            'prompt_parameters': self.prompt_parameters,
-            'intelets': self._get_relation('intelets'),
-        }
-        post_path = f'prompt/'
-        api_response = orm_api.endpoint(post_path).post(json=modified_object)
-        if api_response.status_code == 200 and api_response.content.data:
+        object = {}
+        for k,_ in self.raw_object.attributes.items():
+            object[k] = self.raw_object.attributes[k]
+        api_response = self._options.api.endpoint(self.endpoint_path()).post(json=object)
+        if api_response.status_code == 201 and api_response.content.data:
             self.raw_object = api_response.content.data
 
     def parse(self, parse_type="json", configuration={}):
@@ -164,3 +149,4 @@ class Prompt(ApiModel):
                 'basic_settings': configuration.get('basic_settings', data.get('basic_settings')),
                 'advanced_settings': configuration.get('advanced_settings', data.get('advanced_settings')),
             }
+        
