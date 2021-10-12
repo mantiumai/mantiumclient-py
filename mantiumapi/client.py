@@ -89,7 +89,7 @@ orm_api = OrmApi.config(
     {
         'API_ROOT': ROOT_URL + '/v1', 
         'AUTH': BearerAuth(), 
-        'VALIDATE_SSL': False, 
+        'VALIDATE_SSL': True, 
         'TIMEOUT': 5, 
         'APPEND_SLASH': False
     }
