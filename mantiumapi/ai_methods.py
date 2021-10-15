@@ -21,18 +21,12 @@ from jsonapi_requests.orm import ApiModel, AttributeField, repositories
 
 
 class AiMethods(ApiModel):
-    """Mantium Intelet Endpoint
+    """Mantium AiMethods Endpoint
 
-    This module reads, manipulates and creates intelets
-
-    To update the prompts, modify the prompt list on the object by
-    inserting the prompt_id. Note that the order of the list
-    dictates the order that prompts run, starting at index 0.
-
-    Examples:
-        >>> intelets = Intelet.get_list()
-        >>> intelet = Intelet.from_id('<uuid>')
-        >>> intelet.execute('input data')
+    This module lists AI methods available for each provider.
+    Example:
+        >>> aimethods = AiMethod.get_list(provider="openai")
+        provider must be "openai", "cohere", "ai21", or "mantium"
     """
 
     class Meta:
