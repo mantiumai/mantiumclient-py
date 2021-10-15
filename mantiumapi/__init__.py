@@ -22,6 +22,7 @@ from .intelet import Intelet
 from .log import Log
 from .execute import PromptExecution, InteletExecution
 from .ai_engines import AiEngine
+from .ai_methods import AiMethods
 from .license import License
 from .organization import Organization
 from .files import Files
@@ -46,6 +47,7 @@ __all__ = [
     'PromptExecution', 
     'InteletExecution', 
     'AiEngine',
+    'AiMethods',
     'License',
     'Organization',
     'Files',
