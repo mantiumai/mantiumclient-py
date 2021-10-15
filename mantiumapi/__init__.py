@@ -20,13 +20,13 @@ from .prompt import Prompt
 from .tag import Tag
 from .intelet import Intelet
 from .log import Log
-from .intelet_prompt import InteletPrompt
 from .execute import PromptExecution, InteletExecution
 from .ai_engines import AiEngine
 from .license import License
 from .organization import Organization
 from .files import Files
 from .apikey import APIKey
+from .security import Policy, Rule, Action
 from jsonapi_requests.data import (
     Record,
     JsonApiObject,
@@ -43,14 +43,16 @@ __all__ = [
     'Tag', 
     'Intelet', 
     'Log', 
-    'InteletPrompt', 
     'PromptExecution', 
     'InteletExecution', 
     'AiEngine',
     'License',
     'Organization',
     'Files',
-    'APIKey'
+    'APIKey',
+    'Policy',
+    'Rule',
+    'Action'
     ]
 
 
