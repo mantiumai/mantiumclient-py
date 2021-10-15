@@ -119,21 +119,6 @@ class Prompt(ApiModel):
         if api_response.status_code == 201 and api_response.content.data:
             self.raw_object = api_response.content.data
     
-    def test(self, input):
-        """Tries a Prompt.
-        This bypasses any configured Policies on the Prompt and is not async.
-
-        Args:
-        input: str, The input data for the prompt
-
-        Returns:
-        Dictionary that contains data about the prompt and the provider response
-        """
-        prompt_input = {"input":input}
-        execute_path = f'prompt/{self.id}/try'
-        api_response = orm_api.endpoint(execute_path).post(params=prompt_input)
-        return api_response.payload
-
     def parse(self, parse_type='json', configuration={}):
         post_path = f'prompt/parse/' + parse_type
         self.configuration = configuration
