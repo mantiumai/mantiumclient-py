@@ -16,8 +16,6 @@
 # Please refer to our terms for more information:
 #     https://mantiumai.com/terms-of-use/
 #
-import json
-
 from jsonapi_requests.orm import ApiModel, AttributeField, repositories, RelationField
 
 from .client import orm_api
@@ -32,9 +30,7 @@ class Prompt(ApiModel):
 
     Examples:
         >>> prompts = Prompt.get_list()
-        []
         >>> prompt = Prompt.from_id('<uuid>')
-        {"data":...}
         >>> prompt.execute('input data')
     """
 
@@ -55,6 +51,8 @@ class Prompt(ApiModel):
     ai_method = AttributeField('ai_method')
     ai_provider = AttributeField('ai_provider')
     intelets = AttributeField('intelets')
+    tags = AttributeField('tags')
+    policies = AttributeField('policies')
     default_engine = AttributeField('default_engine')
     ai_engine_id = AttributeField('ai_engine_id')
     status = AttributeField('status')
@@ -67,17 +65,20 @@ class Prompt(ApiModel):
     deploy_author_contact = AttributeField('deploy_author_contact')
     deploy_type = AttributeField('deploy_type')
     deploy_allow_input = AttributeField('deploy_allow_type')
-    deploy_status = AttributeField('deploy_status')    
+    deploy_status = AttributeField('deploy_status')
     last_successful_run = AttributeField('last_successful_run')
-    
-    #intelets = RelationField('intelets')
+
     tags = RelationField('tags')
+    security_policies = RelationField('prompt_policies')
 
     def execute(self, input):
-        """Executes a prompt using the given input
+        """Executes a Prompt
 
-        Parameters:
-            input: string
+        Args:
+        input: str, The input data for the prompt
+
+        Returns:
+        PromptExecution() object
         """
         prompt_input = f'{{"input":"{input}"}}'
         execute_path = f'prompt/{self.id}/execute'
@@ -104,7 +105,7 @@ class Prompt(ApiModel):
 
     def update(self):
         object = {}
-        for k,_ in self.raw_object.attributes.items():
+        for k, _ in self.raw_object.attributes.items():
             object[k] = self.raw_object.attributes[k]
         api_response = self.endpoint.patch(json=object)
         if api_response.status_code == 200 and api_response.content.data:
@@ -112,18 +113,31 @@ class Prompt(ApiModel):
 
     def create(self):
         object = {}
-        for k,_ in self.raw_object.attributes.items():
+        for k, _ in self.raw_object.attributes.items():
             object[k] = self.raw_object.attributes[k]
         api_response = self._options.api.endpoint(self.endpoint_path()).post(json=object)
         if api_response.status_code == 201 and api_response.content.data:
             self.raw_object = api_response.content.data
+    
+    def test(self, input):
+        """Tries a Prompt.
+        This bypasses any configured Policies on the Prompt and is not async.
 
-    def parse(self, parse_type="json", configuration={}):
-        post_path = f"prompt/parse/" + parse_type
+        Args:
+        input: str, The input data for the prompt
+
+        Returns:
+        Dictionary that contains data about the prompt and the provider response
+        """
+        prompt_input = {"input":input}
+        execute_path = f'prompt/{self.id}/try'
+        api_response = orm_api.endpoint(execute_path).post(params=prompt_input)
+        return api_response.payload
+
+    def parse(self, parse_type='json', configuration={}):
+        post_path = f'prompt/parse/' + parse_type
         self.configuration = configuration
-        modified_object = {
-            "body": self.import_body
-        }
+        modified_object = {'body': self.import_body}
         api_response = orm_api.endpoint(post_path).post(json=modified_object)
         self.raw_object = api_response.content.data
         if api_response.status_code == 200 and api_response.content.data:
@@ -149,4 +163,4 @@ class Prompt(ApiModel):
                 'basic_settings': configuration.get('basic_settings', data.get('basic_settings')),
                 'advanced_settings': configuration.get('advanced_settings', data.get('advanced_settings')),
             }
-        
+
