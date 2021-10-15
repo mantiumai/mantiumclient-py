@@ -18,7 +18,12 @@
 #
 from .client import orm_api
 from .execute import InteletExecution
-from jsonapi_requests.orm import ApiModel, AttributeField, RelationField, repositories
+from jsonapi_requests.orm import (
+    ApiModel,
+    AttributeField,
+    RelationField,
+    repositories,
+)
 
 
 class Intelet(ApiModel):
@@ -32,29 +37,38 @@ class Intelet(ApiModel):
 
     Examples:
         >>> intelets = Intelet.get_list()
-        []
         >>> intelet = Intelet.from_id('<uuid>')
-        {"data":...}
         >>> intelet.execute('input data')
     """
 
     class Meta:
         path = 'intelet'
-        type = 'intelet_view'
+        type = 'intelet'
         api = orm_api
-        
 
     intelet_id = AttributeField('intelet_id')
     name = AttributeField('name')
-    organization_id = AttributeField('organization_id')
     description = AttributeField('description')
     created_at = AttributeField('created_at')
-    updated_at = AttributeField('updated_at')
     created_by = AttributeField('created_by')
-    updated_by = AttributeField('updated_by')
+    created_by_email = AttributeField('created_by_email')
+    created_by_name = AttributeField('created_by_name')
+    updated_at = AttributeField('updated_at')
+    updated_by_email = AttributeField('updated_by_email')
+    upcated_by_name = AttributeField('updated_by_name')
+    organization_id = AttributeField('organization_id')
+    organization_name = AttributeField('organization_name')
+    prompts = AttributeField('prompts')
+    last_successful_run = AttributeField('last_successful_run')
+    deploy_name = AttributeField('deploy_name')
+    deploy_description = AttributeField('deploy_description')
+    deploy_placeholder = AttributeField('deploy_placeholder')
+    deploy_author_name = AttributeField('deploy_author_name')
+    deploy_author_contact = AttributeField('deploy_author_contact')
+    deploy_type = AttributeField('deploy_type')
+    deploy_allow_input = AttributeField('deploy_allow_type')
+    deploy_status = AttributeField('deploy_status')
 
-    prompts = RelationField('prompts')
-    tags = RelationField('tags')
 
     @classmethod
     def get_result(cls, intelet_execution_id):
@@ -63,34 +77,72 @@ class Intelet(ApiModel):
         return api_response.payload
 
     def execute(self, input):
-        """Executes an intelet using the given input
+        """Executes an Intelet
 
-        Parameters:
-            input: string
+        Args:
+        input: str, The input data for the Intelet
+
+        Returns:
+        InteletExecution() object
         """
         intelet_input = f'{{"input":"{input}"}}'
         execute_path = self.endpoint.path + '/execute'
         api_response = self.endpoint.requests.post(api_path=execute_path, data=intelet_input)
         return InteletExecution(intelet_execution_id=api_response.payload['intelet_execution_id'])
 
-    def _get_relation(self, attr):
-        r = getattr(self, attr)
-        if r is not None and len(r) >= 1:
-            relations = [o.id for o in r]
+    @classmethod
+    def from_response_content(cls, jsonapi_response):
+        repository = repositories.Repository(cls._options.api.type_registry)
+        if isinstance(jsonapi_response.data, (list, tuple)):
+            result = []
+            for object in jsonapi_response.data:
+                object.type = 'intelet'
+                object.attributes['prompts'] = _get_prompts(object.attributes['prompts'])
+                assert object.type == cls._options.type
+                new = cls(raw_object=object)
+                result.append(new)
+                repository.add(new)
         else:
-            relations = []
-        return relations
+            assert jsonapi_response.data.type == cls._options.type
+            jsonapi_response.data.attributes['prompts'] = _get_prompts(jsonapi_response.data.attributes['prompts'])
+            result = cls(raw_object=jsonapi_response.data)
+            repository.add(result)
+        repository.update_from_api_response(jsonapi_response)
+        return result
 
     def update(self):
-        modified_object = {'name': self.name, 'description': self.description, 'prompts': self._get_relation('prompts')}
-        api_response = self.endpoint.patch(json=modified_object)
+        object = {}
+        for k, _ in self.raw_object.attributes.items():
+            object[k] = self.raw_object.attributes[k]
+        api_response = self.endpoint.patch(json=object)
         if api_response.status_code == 200 and api_response.content.data:
-            self.raw_object = api_response.content.data
+            self.refresh()
 
     def create(self):
-        modified_object = {'name': self.name, 'description': self.description, 'prompts': self._get_relation('prompts')}
-        post_path = f'intelet/'
-
-        api_response = orm_api.endpoint(post_path).post(json=modified_object)
-        if api_response.status_code == 200 and api_response.content.data:
+        object = {}
+        for k, _ in self.raw_object.attributes.items():
+            object[k] = self.raw_object.attributes[k]
+        api_response = self._options.api.endpoint(self.endpoint_path()).post(json=object)
+        if api_response.status_code == 201 and api_response.content.data:
             self.raw_object = api_response.content.data
+
+    def refresh(self):
+        api_response = self.endpoint.get()
+        jsonapi_response = api_response.content
+        jsonapi_response.data.type = 'intelet'
+        jsonapi_response.data.id = jsonapi_response.data.attributes['intelet_id']
+        jsonapi_response.data.attributes['prompts'] = _get_prompts(jsonapi_response.data.attributes['prompts'])
+        assert jsonapi_response.data.type == self.type
+        assert jsonapi_response.data.id == self.id
+        repository = repositories.Repository(self._options.api.type_registry)
+        repository.add(self)
+        repository.update_from_api_response(jsonapi_response)
+
+
+def _get_prompts(prompts):
+    try:
+        prompts_sort = sorted(prompts, key=lambda i: i['operation_order'])
+        prompts = [p['prompt_id'] for p in prompts_sort]
+    except:
+        prompts = []
+    return prompts
