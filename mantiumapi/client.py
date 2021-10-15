@@ -66,7 +66,7 @@ class BearerAuth(AuthBase):
     def get_token(self):
         if is_none_or_empty(self.token):
             if is_none_or_empty(self.user) or is_none_or_empty(self.password):
-                raise ValueError('Make sure both MANTIUM_USER and MANTIUM_PASS are set in your env vars. Alternatively you can just set '
+                raise ValueError('Make sure both MANTIUM_USER and MANTIUM_PASSWORD are set in your env vars. Alternatively you can just set '
                                     'MANTIUM_TOKEN.')
 
         if not self.check_expire_claim():
