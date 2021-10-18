@@ -23,8 +23,6 @@ from .log import Log
 from .execute import PromptExecution, InteletExecution
 from .ai_engines import AiEngine
 from .ai_methods import AiMethods
-from .license import License
-from .organization import Organization
 from .files import Files
 from .apikey import APIKey
 from .security import Policy, Rule, Action
@@ -48,8 +46,6 @@ __all__ = [
     'InteletExecution', 
     'AiEngine',
     'AiMethods',
-    'License',
-    'Organization',
     'Files',
     'APIKey',
     'Policy',
