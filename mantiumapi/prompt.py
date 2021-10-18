@@ -50,9 +50,6 @@ class Prompt(ApiModel):
     adults_only = AttributeField('adults_only')
     ai_method = AttributeField('ai_method')
     ai_provider = AttributeField('ai_provider')
-    intelets = AttributeField('intelets')
-    tags = AttributeField('tags')
-    policies = AttributeField('policies')
     default_engine = AttributeField('default_engine')
     ai_engine_id = AttributeField('ai_engine_id')
     status = AttributeField('status')
@@ -68,8 +65,10 @@ class Prompt(ApiModel):
     deploy_status = AttributeField('deploy_status')
     last_successful_run = AttributeField('last_successful_run')
 
+    intelets = RelationField('intelets')
     tags = RelationField('tags')
-    security_policies = RelationField('prompt_policies')
+    security_policies = RelationField('security_policies')
+    prompt_policies = RelationField('prompt_policies')
 
     def execute(self, input):
         """Executes a Prompt
@@ -105,17 +104,30 @@ class Prompt(ApiModel):
 
     def update(self):
         object = {}
-        for k, _ in self.raw_object.attributes.items():
-            object[k] = self.raw_object.attributes[k]
+        for k, _ in self.attributes.items():
+            object[k] = self.attributes[k]
+        if 'intelets' in self.relationship_cache:
+            object['intelets']=[]
+            for i in self.relationship_cache['intelets']:
+                object['intelets'].append(i.id)
+        if 'tags'  in self.relationship_cache:
+            object['tags'] = []
+            for t in self.relationship_cache['tags']:
+                object['tags'].append(t.id)
+        if 'security_policies' in self.relationship_cache:
+            object['policies']=[]
+            for p in self.relationship_cache['security_policies']:
+                object['policies'].append(p.id)
         api_response = self.endpoint.patch(json=object)
         if api_response.status_code == 200 and api_response.content.data:
             self.raw_object = api_response.content.data
 
     def create(self):
+        post_path = 'prompt/'
         object = {}
-        for k, _ in self.raw_object.attributes.items():
-            object[k] = self.raw_object.attributes[k]
-        api_response = self._options.api.endpoint(self.endpoint_path()).post(json=object)
+        for k, _ in self.attributes.items():
+            object[k] = self.attributes[k]
+        api_response = self._options.api.endpoint(post_path).post(json=object)
         if api_response.status_code == 201 and api_response.content.data:
             self.raw_object = api_response.content.data
     
