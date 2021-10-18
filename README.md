@@ -50,7 +50,7 @@ Read the [getting started guide](https://developer.mantiumai.com/docs) for more 
 - Enter your email address and create a password. After you've verified the email, you'll be able to sign in to the Mantium application. You'll also need your username and password to obtain a token for API use.
 
 ## Installation
-Install [Node.js](https://nodejs.org/en/) on your computer. To install JavaScript Library please use the following command.
+To install the python Library please use the following command.
 
 ```bash
 pip install mantiumapi
