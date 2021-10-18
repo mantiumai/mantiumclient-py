@@ -32,12 +32,16 @@
     - [Get Prompt by ID](#get-prompt-by-id)
     - [Delete Prompt](#delete-prompt)
     - [Execute Prompt](#execute-prompt)
-    - [Get Prompt Result](#get-prompt-result)
-    - [Try Prompt](#try-prompt)
+  - [Intelets](#intelets)
+    - [List Intelets](#list-intelets)
+    - [Create Intelet](#create-intelet)
+    - [Update Intelet](#update-intelet)
+    - [Get Intelet by ID](#get-intelet-by-id)
+    - [Delete Intelet](#delete-intelet)
+    - [Execute Intelet](#execute-intelet)
   - [Logs](#logs)
     - [List Logs](#list-logs)
-    - [Get Log using ID url](#get-log-using-id-url)
-    - [Get Log](#get-log)
+    - [Get Log by ID](#get-log-by-id)
 
 ## Quickstart:
 Read the [getting started guide](https://developer.mantiumai.com/docs) for more information on how to use Mantium.
@@ -73,7 +77,6 @@ set MANTIUM_PASSWORD="<password>"
 $env:MANTIUM_USER="<username>"
 $env:MANTIUM_PASSWORD="<password>"
 ```
-[Go to Table of Contents](#table-of-contents)
 
 ---
 ### AI Methods
@@ -81,7 +84,6 @@ Get all of the supported ai_methods for a provider
 #### List Methods
 
 Requires AI Provider name 
-[Document link](https://developer.mantiumai.com/reference#get_ai_engine_by_name_v1_ai_engine_get_name__name__get)
 
 ```python
 >>> from mantiumapi import AiMethods
@@ -89,7 +91,6 @@ Requires AI Provider name
 >>> print([method.name for method in ai_methods])
 ['answers', 'classifications', 'completion', 'search']
 ```
-[Go to Table of Contents](#table-of-contents)
 
 ---
 ### AI Engines
@@ -192,6 +193,7 @@ Optional Query String Parameters
 ```
 
 #### Get Prompt by ID
+
 ```python
 >>> prompt = Prompt.from_id('3184ba90-c2b1-4604-bbd2-6ed436ca5f52')
 >>> prompt.name
@@ -199,6 +201,8 @@ Optional Query String Parameters
 ```
 
 #### Create Prompt
+
+
 ```python
 >>> new_prompt.name = "A new prompt"
 >>> new_prompt.prompt_text = "Prompt text"
@@ -233,8 +237,6 @@ As this is an asynchronous endpoint, the first result returned will not be a fin
 
 - Input (string)- Data to append to Prompt for execution
 
-[Document link](https://developer.mantiumai.com/reference#execute_prompt_v1_prompt__prompt_id__execute_post)
-
 ```python
 >>> prompt = Prompt.from_id('0aab4c37-d931-4726-8768-b7ff91776ce6')
 >>> result = Prompt.execute('Data for the Prompt')
@@ -245,4 +247,118 @@ As this is an asynchronous endpoint, the first result returned will not be a fin
 >>> result.__dict__
 {'prompt_execution_id': '221202da-9d76-4711-91f0-e0d8b50a57d5', 'prompt_id': '0aab4c37-d931-4726-8768-b7ff91776ce6', 'input': 'Data for the Prompt', 'output': 'Output from the Prompt Exeuction', 'reason': '', 'status': 'COMPLETED', 'error': '', 'warning_message': '', 'hitl_info': None}
 ```
+
+[Go to Table of Contents](#table-of-contents)
+
+---
+
+### Intelets
+Intelets organize multiple prompts by grouping them together sequentially so that the output of one prompt feeds into the input of the next - this enables the creation of complex AI data pipelines for processing text.
+
+#### List Intelets
+
+List all of your organization's prompts. 
+
+Optional Query String Parameters
+
+- page - The page of records to return. Optional, defaults to page 1.
+- size - the number of records to return for each page. Optional, defaults to 20 - prompts a page.
+
+```python
+>>> from mantiumapi import Intelet
+>>> intelets = Intelet.get_list()
+>>> print([i.name for i in intelets])
+['My first Intelet', 'Processing pipeline', ...]
+```
+
+#### Get Intelet by ID
+
+```python
+>>> intelet = Intelet.from_id('0aab4c37-d931-4726-8768-b7ff91776ce6')
+>>> print(intelet.name)
+'My first Intelet'
+```
+
+#### Create Intelet
+
+The order of Prompts in the prompts list dictate in which order they will be executed in the pipeline.
+
+```python
+>>> new_intelet=Intelet()
+>>> new_intelet.name = "Name of new Intelet"
+>>> new_intelet.description = "Description of the Intelet"
+>>> new_intelet.prompts = ['3184ba90-c2b1-4604-bbd2-6ed436ca5f52']
+>>> new_intelet.save()
+```
+
+#### Update Intelet
+```python
+>>> intelet = Intelet.from_id('3184ba90-c2b1-4604-bbd2-6ed436ca5f52')
+>>> intelet.name = "New Intelet name"
+>>> intelet.update()
+```
+
+#### Delete Intelet
+```python
+>>> intelet = intelet.from_id('3184ba90-c2b1-4604-bbd2-6ed436ca5f52')
+>>> intelet.refresh()
+>>> intelet.delete()
+```
+
+#### Execute Intelet
+
+Asynchronously submit input to an Intelet for execution. Returns a InteletExecute object to manage the result.
+
+As this is an asynchronous endpoint, the first result returned will not be a finished result. The result can be updated by calling .refresh() on the InteletExecute object.
+
+- Input (string)- Data to append to Prompt for execution
+
+```python
+>>> intelet = Intelet.from_id('3c3a14f3-aeaa-468b-8b8f-8d8a053f1719')
+>>> result = Intelet.execute('Sample input text')
+>>> result.__dict__
+{'intelet_execution_id': 'd81fba13-d3fc-41af-9f0b-10816b7ca5df', 'intelet_id': '3c3a14f3-aeaa-468b-8b8f-8d8a053f1719', 'input': 'Sample input text', 'output': '', 'reason': '', 'status': 'QUEUED', 'error': '', 'executed_prompts': [], 'pending_prompts': ['760311e5-9137-4ed6-dc2a-34f077b44131', '3a063314-1fe5-42f2-a276-c25404071c3d', '6004bfd0-5bec-4f41-bd89-1e4a6ca3f76b'], 'results': []}
+>>> result.refresh()
+>>> result.__dict__
+{'intelet_execution_id': 'd81fba13-d3fc-41af-9f0b-10816b7ca5df', 'intelet_id': '3c3a14f3-aeaa-468b-8b8f-8d8a053f1719', 'input': 'Sample input text', 'output': 'Output of Intelet', 'reason': '', 'status': 'COMPLETED', 'error': '', 'executed_prompts': ['760311e5-9137-4ed6-dc2a-34f077b44131', '3a063314-1fe5-42f2-a276-c25404071c3d', '6004bfd0-5bec-4f41-bd89-1e4a6ca3f76b'], 'pending_prompts': [], 'results': []}
+```
+
+[Go to Table of Contents](#table-of-contents)
+
+---
+
+### Logs
+
+#### List Logs
+
+Query Params
+
+* `page` (int) - Page number
+* `size` (int) - Page size. If not supplied, returns all the results in a single page for certain APIs.
+* `after_date` (string) - After Date
+* `before_date` (string) Before Date
+* `log_type` (string) LogType, An enumeration. [AUTH | DEFAULT | PROMPT | INTELET FILE]
+* `log_level` (string) Log Level
+* `log_status` (string) Log Status
+
+```python
+>>> from mantiumapi import Log
+>>> logs = Log.get_list(params={"size":5, "log_type":"PROMPT"})
+>>> print([(l.log_type, l.log_payload) for l in logs])
+[('PROMPT', {'to': 'completion', 'name': 'OpenAI Completion', 'error': '', 'input': ...]
+```
+
+#### Get Log by ID
+
+```python
+>>> log = Log.from_id('b372d92c-028d-463b-98ba-3cec3f170af5')
+>>> log.id
+'b372d92c-028d-463b-98ba-3cec3f170af5'
+>>> log.log_type
+'PROMPT'
+```
+
+[Go to Table of Contents](#table-of-contents)
+
+---
 
