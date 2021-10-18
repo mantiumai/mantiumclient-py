@@ -243,6 +243,6 @@ As this is an asynchronous endpoint, the first result returned will not be a fin
 >>> result.refresh()
 >>> result.refresh()
 >>> result.__dict__
-{'prompt_execution_id': '221202da-9d76-4711-91f0-e0d8b50a57d5', 'prompt_id': '0aab4c37-d931-4726-8768-b7ff91776ce6', 'input': 'Data for the Prompt', 'output': "Output from the Prompt Exeuction, 'reason': '', 'status': 'COMPLETED', 'error': '', 'warning_message': '', 'hitl_info': None}
+{'prompt_execution_id': '221202da-9d76-4711-91f0-e0d8b50a57d5', 'prompt_id': '0aab4c37-d931-4726-8768-b7ff91776ce6', 'input': 'Data for the Prompt', 'output': 'Output from the Prompt Exeuction', 'reason': '', 'status': 'COMPLETED', 'error': '', 'warning_message': '', 'hitl_info': None}
 ```
 
