@@ -229,7 +229,7 @@ Optional Query String Parameters
 
 Asynchronously submit input to a Prompt for execution. Returns a PromptExecute object to manage the result.
 
-As this is an asynchronus endpoint, the first result returned will not be a finished result. The result can be updated by calling .refresh() on the PromptExecute object.
+As this is an asynchronous endpoint, the first result returned will not be a finished result. The result can be updated by calling .refresh() on the PromptExecute object.
 
 - Input (string)- Data to append to Prompt for execution
 
