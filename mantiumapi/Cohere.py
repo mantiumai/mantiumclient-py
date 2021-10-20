@@ -78,12 +78,12 @@ class Cohere(object):
         if not isinstance(default_engine, DefaultEngine):
             raise Exception("default_engine must be one of: shrimp|otter|seal|shark|orca")
 
-        self.default_engine = default_engine
+        self.default_engine = default_engine.value
 
         if not isinstance(ai_method, AiMethod):
             raise Exception("ai_method must be: generate|choose_best|likelihood|embed|similarity")
 
-        self.ai_method = ai_method
+        self.ai_method = ai_method.value
 
 
 

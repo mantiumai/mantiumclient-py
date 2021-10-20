@@ -8,9 +8,9 @@ class DefaultEngine(Enum):
 
 class AiMethod(Enum):
         """Must have an endpoint (ai_method)"""
-        ai_method = 'Wordsmith'
+        wordsmith = 'Wordsmith'
 
-class Ai21(object):
+class Mantium(object):
     """
     default_engine: j1_jumbo, j1_large
     ai_method: complete
@@ -27,12 +27,12 @@ class Ai21(object):
         if not isinstance(default_engine, DefaultEngine):
             raise Exception("default_engine must be: j1_jumbo | j1_large")
 
-        self.default_engine = default_engine
+        self.default_engine = default_engine.value
 
         if not isinstance(ai_method, AiMethod):
             raise Exception("ai_method must be: complete")
 
-        self.ai_method = ai_method
+        self.ai_method = ai_method.value
 
 
 # export interface WordsmithPromptParametersInterface {
