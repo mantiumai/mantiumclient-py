@@ -16,13 +16,11 @@
 # Please refer to our terms for more information:
 #     https://mantiumai.com/terms-of-use/
 #
-import json
-
 from jsonapi_requests.orm import ApiModel, AttributeField, repositories, RelationField
 
 from .client import orm_api
 from .intelet import Intelet
-from .prompt_execution import PromptExecution
+from .execute import PromptExecution
 
 
 class Prompt(ApiModel):
@@ -32,9 +30,7 @@ class Prompt(ApiModel):
 
     Examples:
         >>> prompts = Prompt.get_list()
-        []
         >>> prompt = Prompt.from_id('<uuid>')
-        {"data":...}
         >>> prompt.execute('input data')
     """
 
@@ -43,37 +39,45 @@ class Prompt(ApiModel):
         api = orm_api
 
     prompt_id = AttributeField('prompt_id')
-    name = AttributeField('name')
     organization_id = AttributeField('organization_id')
+    name = AttributeField('name')
     description = AttributeField('description')
+    created_at = AttributeField('created_at')
     prompt_text = AttributeField('prompt_text')
-    status = AttributeField('status')
+    deploy_scope = AttributeField('deploy_scope')
+    deploy_date = AttributeField('deploy_date')
+    ai_provider_approved = AttributeField('ai_provider_approved')
+    adults_only = AttributeField('adults_only')
+    ai_method = AttributeField('ai_method')
     ai_provider = AttributeField('ai_provider')
     default_engine = AttributeField('default_engine')
-    ai_method = AttributeField('ai_method')
+    ai_engine_id = AttributeField('ai_engine_id')
+    status = AttributeField('status')
     prompt_parameters = AttributeField('prompt_parameters')
-    created_at = AttributeField('created_at')
     last_activity = AttributeField('last_activity')
-    
-    #intelets = RelationField('intelets')
+    deploy_name = AttributeField('deploy_name')
+    deploy_description = AttributeField('deploy_description')
+    deploy_placeholder = AttributeField('deploy_placeholder')
+    deploy_author_name = AttributeField('deploy_author_name')
+    deploy_author_contact = AttributeField('deploy_author_contact')
+    deploy_type = AttributeField('deploy_type')
+    deploy_allow_input = AttributeField('deploy_allow_type')
+    deploy_status = AttributeField('deploy_status')
+    last_successful_run = AttributeField('last_successful_run')
+
+    intelets = RelationField('intelets')
     tags = RelationField('tags')
-
-    @classmethod
-    def get_list(cls, **kwargs):
-        response = orm_api.endpoint(cls.endpoint_path()).get(**kwargs)
-        return cls.from_response_content(response.content)
-
-    @classmethod
-    def get_result(cls, prompt_execution_id):
-        result_path = f'prompt/result/{prompt_execution_id}'
-        api_response = orm_api.endpoint(result_path).get()
-        return api_response.payload
+    security_policies = RelationField('security_policies')
+    prompt_policies = RelationField('prompt_policies')
 
     def execute(self, input):
-        """Executes a prompt using the given input
+        """Executes a Prompt
 
-        Parameters:
-            input: string
+        Args:
+        input: str, The input data for the prompt
+
+        Returns:
+        PromptExecution() object
         """
         prompt_input = f'{{"input":"{input}"}}'
         execute_path = f'prompt/{self.id}/execute'
@@ -99,46 +103,38 @@ class Prompt(ApiModel):
         return relations
 
     def update(self):
-        modified_object = {
-            'name': self.name,
-            'ai_provider': self.ai_provider,
-            'status': self.status,
-            'description': self.description,
-            'prompt_text': self.prompt_text,
-            'ai_method': self.ai_method,
-            'default_engine': self.default_engine,
-            'prompt_parameters': self.prompt_parameters,
-            'intelets': self._get_relation('intelets'),
-        }
-
-        patch_path = f'prompt/{self.id}'
-        api_response = orm_api.endpoint(patch_path).patch(json=modified_object)
+        object = {}
+        for k, _ in self.attributes.items():
+            object[k] = self.attributes[k]
+        if 'intelets' in self.relationship_cache:
+            object['intelets']=[]
+            for i in self.relationship_cache['intelets']:
+                object['intelets'].append(i.id)
+        if 'tags'  in self.relationship_cache:
+            object['tags'] = []
+            for t in self.relationship_cache['tags']:
+                object['tags'].append(t.id)
+        if 'security_policies' in self.relationship_cache:
+            object['policies']=[]
+            for p in self.relationship_cache['security_policies']:
+                object['policies'].append(p.id)
+        api_response = self.endpoint.patch(json=object)
         if api_response.status_code == 200 and api_response.content.data:
             self.raw_object = api_response.content.data
 
     def create(self):
-        modified_object = {
-            'name': self.name,
-            'ai_provider': self.ai_provider,
-            'status': self.status,
-            'description': self.description,
-            'prompt_text': self.prompt_text,
-            'ai_method': self.ai_method,
-            'default_engine': self.default_engine,
-            'prompt_parameters': self.prompt_parameters,
-            'intelets': self._get_relation('intelets'),
-        }
-        post_path = f'prompt/'
-        api_response = orm_api.endpoint(post_path).post(json=modified_object)
-        if api_response.status_code == 200 and api_response.content.data:
+        post_path = 'prompt/'
+        object = {}
+        for k, _ in self.attributes.items():
+            object[k] = self.attributes[k]
+        api_response = self._options.api.endpoint(post_path).post(json=object)
+        if api_response.status_code == 201 and api_response.content.data:
             self.raw_object = api_response.content.data
-
-    def parse(self, parse_type="json", configuration={}):
-        post_path = f"prompt/parse/" + parse_type
+    
+    def parse(self, parse_type='json', configuration={}):
+        post_path = f'prompt/parse/' + parse_type
         self.configuration = configuration
-        modified_object = {
-            "body": self.import_body
-        }
+        modified_object = {'body': self.import_body}
         api_response = orm_api.endpoint(post_path).post(json=modified_object)
         self.raw_object = api_response.content.data
         if api_response.status_code == 200 and api_response.content.data:
@@ -164,3 +160,4 @@ class Prompt(ApiModel):
                 'basic_settings': configuration.get('basic_settings', data.get('basic_settings')),
                 'advanced_settings': configuration.get('advanced_settings', data.get('advanced_settings')),
             }
+

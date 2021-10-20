@@ -41,17 +41,13 @@ class Tag(ApiModel):
     organization_id = AttributeField('organization_id')
     description = AttributeField('description')
 
-    def __init__(self, raw_object=None):
-        super().__init__(raw_object)
-        self.id = self.tag_id
-
     @classmethod
     def get_list(cls, **kwargs):
         response = orm_api.endpoint(cls.endpoint_path()).get(**kwargs)
         return cls.from_response_content(response.content)
 
     def refresh(self):
-        get_path = f'tag/id/{self.id}'
+        get_path = f'tag/{self.id}'
         api_response = orm_api.endpoint(get_path).get()
         jsonapi_response = api_response.content
         assert jsonapi_response.data.type == self.type

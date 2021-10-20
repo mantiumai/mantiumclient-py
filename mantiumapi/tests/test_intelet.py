@@ -2,7 +2,7 @@ import unittest
 from unittest import mock
 
 import mantiumapi.intelet
-import mantiumapi.prompt_execution
+import mantiumapi.execute
 
 
 def mocked_requests(*args, **kwargs):
@@ -77,7 +77,7 @@ class InteletTests(unittest.TestCase):
         )
         target_result = target.execute('test input')
         self.assertIsInstance(
-            target_result, mantiumapi.prompt_execution.InteletExecution
+            target_result, mantiumapi.execute.InteletExecution
         )
         self.assertEqual(
             target_result.intelet_execution_id,
@@ -93,7 +93,7 @@ class InteletTests(unittest.TestCase):
         self.assertEqual(target_result.reason, 'reason')
         self.assertIsInstance(
             target_result.executed_prompts[0],
-            mantiumapi.prompt_execution.PromptExecution,
+            mantiumapi.execute.PromptExecution,
         )
         self.assertListEqual(
             target_result.pending_prompts,
