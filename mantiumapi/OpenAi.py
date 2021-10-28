@@ -20,18 +20,18 @@ class AiMethod(Enum):
     answers = 'answers'
 
 
-class Ai21(Prompt):
+class OpenAi(Prompt):
 
     """
-    default_engine: j1_jumbo, j1_large
-    ai_method: complete
+    default_engine: davinci, curie, babbage, ada
+    ai_method: completions, search, classifications, answers  # codex??
 
     ***Settings***
     maxTokens: Max 2048 (incl. input)
     temperature: [0,1] inclusive
     topP: [0,1] inclusive"""
 
-    ai_provider = 'ai21'
+    ai_provider = 'openai'
 
     def __init__(self, default_engine, ai_method):
 
