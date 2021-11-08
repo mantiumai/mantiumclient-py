@@ -20,7 +20,8 @@ from .client import orm_api
 from jsonapi_requests.orm import ApiModel, AttributeField, repositories
 
 
-class AiMethods(ApiModel):
+
+class AiMethod(ApiModel):
     """Mantium AiMethods Endpoint
 
     This module lists AI methods available for each provider.
@@ -30,13 +31,14 @@ class AiMethods(ApiModel):
     """
 
     class Meta:
-        type = 'ai_methods'
+        type = 'ai_method'
         api = orm_api
 
     name = AttributeField('name')
-    api_name = AttributeField('use_cases')
+    api_name = AttributeField('api_name')
     description = AttributeField('description')
-    shareable = AttributeField('sharable')
+    shareable = AttributeField('shareable')
+    endpoint_url = AttributeField('endpoint_url')
     ai_provider = AttributeField('ai_provider')
     ai_engines = AttributeField('ai_engines')
 
@@ -45,23 +47,3 @@ class AiMethods(ApiModel):
         engine_path = f'ai_methods/{provider}'
         response = orm_api.endpoint(engine_path).get()
         return cls.from_response_content(response.content)
-
-    @classmethod
-    def from_response_content(cls, jsonapi_response):
-        repository = repositories.Repository(cls._options.api.type_registry)
-        if isinstance(jsonapi_response.data, (list, tuple)):
-            result = []
-            for object in jsonapi_response.data:
-                object.type = 'ai_methods'
-                object.id = f'{object.attributes["name"]}-{object.attributes["ai_provider"]["name"]}'
-                new = cls(raw_object=object)
-                result.append(new)
-                repository.add(new)
-        else:
-            jsonapi_response.data.id = (
-                f'{jsonapi_response.data.attributes["name"]}-{jsonapi_response.data.attributes["ai_provider"]["name"]}'
-            )
-            result = cls(raw_object=jsonapi_response.data)
-            repository.add(result)
-        repository.update_from_api_response(jsonapi_response)
-        return result
