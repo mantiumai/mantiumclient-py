@@ -2,7 +2,7 @@
 # Completion
 
 from .prompt import Prompt
-from .ai_engines import ai_engines
+from .engine_id_values import default_ai_engines
 from enum import Enum
 
 

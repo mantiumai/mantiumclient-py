@@ -14,22 +14,16 @@ def mocked_requests(*args, **kwargs):
         def json(self):
             return self.json_data
 
-    if (
-        args[0] == 'GET'
-        and args[1]
-        == 'https://api.mantiumai.com/v1/prompt/9001cf88-eaec-485c-8fcd-1d9fe3ba0ac4'
-    ):
+    if args[0] == 'GET' and args[1] == 'https://api.mantiumai.com/v1/prompt/9001cf88-eaec-485c-8fcd-1d9fe3ba0ac4':
         return MockResponse(PROMPT, 200)
     elif (
         args[0] == 'GET'
-        and args[1]
-        == 'https://api.mantiumai.com/v1/prompt/result/23d8a134-0fee-4da5-a1ae-c78ea569d0ed'
+        and args[1] == 'https://api.mantiumai.com/v1/prompt/result/23d8a134-0fee-4da5-a1ae-c78ea569d0ed'
     ):
         return MockResponse(PROMPT_EXECUTE_RESULT, 200)
     elif (
         args[0] == 'POST'
-        and args[1]
-        == 'https://api.mantiumai.com/v1/prompt/9001cf88-eaec-485c-8fcd-1d9fe3ba0ac4/execute'
+        and args[1] == 'https://api.mantiumai.com/v1/prompt/9001cf88-eaec-485c-8fcd-1d9fe3ba0ac4/execute'
     ):
         return MockResponse(PROMPT_EXECUTE, 200)
     else:
@@ -48,22 +42,14 @@ class PromptTests(unittest.TestCase):
         side_effect=mocked_requests,
     )
     def test_prompt(self, mock_get):
-        target = mantiumapi.prompt.Prompt.from_id(
-            '9001cf88-eaec-485c-8fcd-1d9fe3ba0ac4'
-        )
+        target = mantiumapi.prompt.Prompt.from_id('9001cf88-eaec-485c-8fcd-1d9fe3ba0ac4')
         self.assertIsInstance(target, mantiumapi.prompt.Prompt)
         self.assertEqual(target.name, 'Test Prompt')
-        self.assertEqual(
-            target.prompt_id, '9001cf88-eaec-485c-8fcd-1d9fe3ba0ac4'
-        )
-        self.assertEqual(
-            target.organization_id, 'a448a888-6faf-4b7f-8f57-3f6872036428'
-        )
+        self.assertEqual(target.prompt_id, '9001cf88-eaec-485c-8fcd-1d9fe3ba0ac4')
+        self.assertEqual(target.organization_id, 'a448a888-6faf-4b7f-8f57-3f6872036428')
         self.assertEqual(target.description, 'Test Prompt Description')
         self.assertEqual(target.created_at, '2021-01-01T00:00:00.000000+00:00')
-        self.assertEqual(
-            target.last_activity, '2021-01-02T00:00:00.000000+00:00'
-        )
+        self.assertEqual(target.last_activity, '2021-01-02T00:00:00.000000+00:00')
         self.assertEqual(target.prompt_text, 'test prompt text')
         self.assertEqual(target.ai_method, 'completion')
         self.assertEqual(target.ai_provider, 'OpenAI')
@@ -98,17 +84,13 @@ class PromptTests(unittest.TestCase):
         side_effect=mocked_requests,
     )
     def test_prompt_execute(self, mock_post):
-        target = mantiumapi.prompt.Prompt.from_id(
-            '9001cf88-eaec-485c-8fcd-1d9fe3ba0ac4'
-        )
+        target = mantiumapi.prompt.Prompt.from_id('9001cf88-eaec-485c-8fcd-1d9fe3ba0ac4')
         target_result = target.execute('test input')
         self.assertEqual(
             target_result.prompt_execution_id,
             '23d8a134-0fee-4da5-a1ae-c78ea569d0ed',
         )
-        self.assertEqual(
-            target_result.prompt_id, '9001cf88-eaec-485c-8fcd-1d9fe3ba0ac4'
-        )
+        self.assertEqual(target_result.prompt_id, '9001cf88-eaec-485c-8fcd-1d9fe3ba0ac4')
         self.assertEqual(target_result.status, 'COMPLETED')
         self.assertEqual(target_result.input, 'test input')
         self.assertEqual(target_result.output, 'test output')
