@@ -1,14 +1,19 @@
 # Mantium Prompt Settings
 
-from enum import Enum 
+from enum import Enum
+
 
 class DefaultEngine(Enum):
-        """Must have a default engine"""
-        iron = 'iron'
+    """Must have a default engine"""
+
+    iron = 'iron'
+
 
 class AiMethod(Enum):
-        """Must have an endpoint (ai_method)"""
-        wordsmith = 'Wordsmith'
+    """Must have an endpoint (ai_method)"""
+
+    wordsmith = 'Wordsmith'
+
 
 class Mantium(object):
     """
@@ -18,19 +23,19 @@ class Mantium(object):
     ***Settings***
     maxTokens: Max 2048 (incl. input)
     temperature: [0,1] inclusive
-    topP: [0,1] inclusive """
+    topP: [0,1] inclusive"""
 
     def __init__(self, default_engine, ai_method):
 
         self.ai_provider = 'ai21'
 
         if not isinstance(default_engine, DefaultEngine):
-            raise Exception("default_engine must be: j1_jumbo | j1_large")
+            raise Exception('default_engine must be one of: DefaultEngine. + iron')
 
         self.default_engine = default_engine.value
 
         if not isinstance(ai_method, AiMethod):
-            raise Exception("ai_method must be: complete")
+            raise Exception('ai_method must be: complete')
 
         self.ai_method = ai_method.value
 

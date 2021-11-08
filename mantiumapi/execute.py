@@ -18,6 +18,7 @@
 #
 from .client import orm_api
 
+
 class PromptExecution:
     def __init__(self, prompt_execution_id, obj=''):
         self.prompt_execution_id = prompt_execution_id
@@ -37,7 +38,7 @@ class PromptExecution:
                 self.hitl_info = obj['hitl_info']
             else:
                 self.hitl_info = '{}'
-                
+
         if not hasattr(self, 'status'):
             self.refresh()
 
@@ -54,7 +55,9 @@ class PromptExecution:
     def refresh(self):
         get_path = f'prompt/result/{self.prompt_execution_id}'
         api_response = orm_api.endpoint(get_path).get()
-        self.__init__(prompt_execution_id=api_response.payload['prompt_execution_id'], obj=api_response.payload)
+        self.__init__(
+            prompt_execution_id=api_response.payload['prompt_execution_id'], obj=api_response.payload
+        )  # ask about this method - potential endless loop w/init?
 
     def hitl_accept(self):
         post_path = f'hitl/{self.prompt_execution_id}/accept'
@@ -78,7 +81,6 @@ class PromptExecution:
 
 
 class InteletExecution:
-
     def __init__(self, intelet_execution_id, obj=''):
         self.intelet_execution_id = intelet_execution_id
         if obj:

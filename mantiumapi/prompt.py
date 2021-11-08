@@ -23,6 +23,9 @@ from .intelet import Intelet
 from .execute import PromptExecution
 
 
+# Create a class to retrieve all available engines by id - boto3
+
+
 class Prompt(ApiModel):
     """Mantium Prompt Endpoint
 
@@ -55,6 +58,7 @@ class Prompt(ApiModel):
     status = AttributeField('status')
     prompt_parameters = AttributeField('prompt_parameters')
     last_activity = AttributeField('last_activity')
+<<<<<<< HEAD
     deploy_name = AttributeField('deploy_name')
     deploy_description = AttributeField('deploy_description')
     deploy_placeholder = AttributeField('deploy_placeholder')
@@ -66,6 +70,10 @@ class Prompt(ApiModel):
     last_successful_run = AttributeField('last_successful_run')
 
     intelets = RelationField('intelets')
+=======
+
+    # intelets = RelationField('intelets')
+>>>>>>> df1bde5 (adding prompt details)
     tags = RelationField('tags')
     security_policies = RelationField('security_policies')
     prompt_policies = RelationField('prompt_policies')
@@ -130,7 +138,11 @@ class Prompt(ApiModel):
         api_response = self._options.api.endpoint(post_path).post(json=object)
         if api_response.status_code == 201 and api_response.content.data:
             self.raw_object = api_response.content.data
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> df1bde5 (adding prompt details)
     def parse(self, parse_type='json', configuration={}):
         post_path = f'prompt/parse/' + parse_type
         self.configuration = configuration

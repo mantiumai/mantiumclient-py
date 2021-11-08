@@ -1,37 +1,42 @@
 # Cohere Prompt Settings
 
-from enum import Enum 
+from enum import Enum
+
 
 class DefaultEngine(Enum):
-        """Must have a default engine"""
-        shrimp = 'shrimp'
-        otter = 'otter'
-        seal = 'seal'
-        shark ='shark'
-        orca = 'orca'
-   
+    """Must have a default engine"""
+
+    shrimp = 'shrimp'
+    otter = 'otter'
+    seal = 'seal'
+    shark = 'shark'
+    orca = 'orca'
+
+
 class AiMethod(Enum):
-        """Must have an endpoint (ai_method)"""
-        generate = 'generate'
-        choose_best = 'choose_best'
-        likelihood = 'likelihood'
-        embed = 'embed'  # only functional with shrimp or seal
-        similarity = 'similarity'  # only functional with shrimp or seal
+    """Must have an endpoint (ai_method)"""
+
+    generate = 'generate'
+    choose_best = 'choose_best'
+    likelihood = 'likelihood'
+    embed = 'embed'  # only functional with shrimp or seal
+    similarity = 'similarity'  # only functional with shrimp or seal
+
 
 class Cohere(object):
     """
     default_engine: shrimp, otter, seal, shark, orca
-    ai_method: generate, choose_best, likelihood, embed, similarity 
+    ai_method: generate, choose_best, likelihood, embed, similarity
 
     ***Settings***
 
-    GENERATION: 
+    GENERATION:
     max_tokens: type int, https://docs.cohere.ai/bpe-tokens-wiki/
     temperature: type float, https://docs.cohere.ai/temperature-wiki/
     k: optional, type int, default 0, only top k most likely tokens used for generation
     p: optional, type float, default .75, [0, 1] inclusive, probability
     frequencty_penalty: optional, type float, default 0, [0, 1] inclusive
-    presence_penalty: optional, type float, default 0, [0, 1] inclusive 
+    presence_penalty: optional, type float, default 0, [0, 1] inclusive
     stop_sequences: optional, array of strings, cut generation at specified string value
     return_likelihoods: optional, one of GENERATION|ALL|NONE, default NONE
     -------------------------------------------------------------
@@ -76,22 +81,14 @@ class Cohere(object):
         self.ai_provider = 'cohere'
 
         if not isinstance(default_engine, DefaultEngine):
-            raise Exception("default_engine must be one of: shrimp|otter|seal|shark|orca")
+            raise Exception('default_engine must be one of: shrimp|otter|seal|shark|orca')
 
         self.default_engine = default_engine.value
 
         if not isinstance(ai_method, AiMethod):
-            raise Exception("ai_method must be: generate|choose_best|likelihood|embed|similarity")
+            raise Exception('ai_method must be: generate|choose_best|likelihood|embed|similarity')
 
         self.ai_method = ai_method.value
-
-
-
-
-
-
-
-
 
 
 # # Choose Best
@@ -162,7 +159,7 @@ class Cohere(object):
 #   ai_provider: string;
 #   texts: string[];
 # }
-# # Generate 
+# # Generate
 # export interface GeneratePromptParametersInterface {
 #   basic_settings: GeneratePromptParametersBasicSettingsInterface;
 #   default_engine: string;

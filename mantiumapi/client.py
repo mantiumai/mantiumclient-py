@@ -66,8 +66,15 @@ class BearerAuth(AuthBase):
     def get_token(self):
         if is_none_or_empty(self.token):
             if is_none_or_empty(self.user) or is_none_or_empty(self.password):
+<<<<<<< HEAD
                 raise ValueError('Make sure both MANTIUM_USER and MANTIUM_PASSWORD are set in your env vars. Alternatively you can just set '
                                     'MANTIUM_TOKEN.')
+=======
+                raise ValueError(
+                    'Make sure both MANTIUM_USER and MANTIUM_PASS are set in your env vars. Alternatively you can just set '
+                    'MANTIUM_TOKEN.'
+                )
+>>>>>>> df1bde5 (adding prompt details)
 
         if not self.check_expire_claim():
             return self.token
@@ -78,19 +85,15 @@ class BearerAuth(AuthBase):
         elif r.status_code == 422:
             raise ValueError('Credentials were unprocessable by the API.')
         elif r.status_code != 200:
-            raise Exception('Unexpected issue while attempting to authenticate to the Mantium API. '
-                            'Status Code: ' + str(r.status_code)) 
+            raise Exception(
+                'Unexpected issue while attempting to authenticate to the Mantium API. '
+                'Status Code: ' + str(r.status_code)
+            )
         elif r.status_code == 200:
             self.token = r.json()['data']['attributes']['bearer_id']
             return self.token
 
 
 orm_api = OrmApi.config(
-    {
-        'API_ROOT': ROOT_URL + '/v1', 
-        'AUTH': BearerAuth(), 
-        'VALIDATE_SSL': True, 
-        'TIMEOUT': 5, 
-        'APPEND_SLASH': False
-    }
+    {'API_ROOT': ROOT_URL + '/v1', 'AUTH': BearerAuth(), 'VALIDATE_SSL': True, 'TIMEOUT': 5, 'APPEND_SLASH': False}
 )
