@@ -22,7 +22,7 @@ from .intelet import Intelet
 from .log import Log
 from .execute import PromptExecution, InteletExecution
 from .ai_engines import AiEngine
-from .ai_methods import AiMethods
+from .ai_methods import AiMethod
 from .files import Files
 from .apikey import APIKey
 from .security import Policy, Rule, Action
@@ -45,7 +45,7 @@ __all__ = [
     'PromptExecution', 
     'InteletExecution', 
     'AiEngine',
-    'AiMethods',
+    'AiMethod',
     'Files',
     'APIKey',
     'Policy',
