@@ -20,6 +20,7 @@ from .client import orm_api
 from jsonapi_requests.orm import ApiModel, AttributeField, repositories
 
 
+
 class AiMethod(ApiModel):
     """Mantium AiMethods Endpoint
 
