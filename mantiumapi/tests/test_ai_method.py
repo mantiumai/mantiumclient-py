@@ -31,7 +31,7 @@ class AiEnginesTests(unittest.TestCase):
     )
     def test_ai_method(self, mock_get):
         target = AiMethod.get_list(provider='openai')
-        self.assertIsInstance(target[0], mantiumapi.ai_methods.AiMethod)
+        self.assertIsInstance(target[0], AiMethod)
         self.assertEqual(target[0].type, 'ai_method')
         self.assertEqual(target[0].name, 'answers')
         self.assertEqual(target[0].api_name, 'answers')
