@@ -17,7 +17,6 @@
 #     https://mantiumai.com/terms-of-use/
 #
 
-import openai
 from .prompt import Prompt
 from .tag import Tag
 from .intelet import Intelet
@@ -40,7 +39,7 @@ from jsonapi_requests.data import (
 from jsonapi_requests import data
 
 __all__ = [
-    'OpenAi' 'Prompt',
+    'Prompt',
     'Tag',
     'Intelet',
     'Log',

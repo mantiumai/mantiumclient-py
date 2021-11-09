@@ -27,6 +27,7 @@ from .version import __version__
 ROOT_URL = os.getenv('ROOT_URL', 'https://api.mantiumai.com')
 version = __version__
 
+
 def is_none_or_empty(value):
     return not (value and value.strip())
 
@@ -66,15 +67,10 @@ class BearerAuth(AuthBase):
     def get_token(self):
         if is_none_or_empty(self.token):
             if is_none_or_empty(self.user) or is_none_or_empty(self.password):
-<<<<<<< HEAD
-                raise ValueError('Make sure both MANTIUM_USER and MANTIUM_PASSWORD are set in your env vars. Alternatively you can just set '
-                                    'MANTIUM_TOKEN.')
-=======
                 raise ValueError(
-                    'Make sure both MANTIUM_USER and MANTIUM_PASS are set in your env vars. Alternatively you can just set '
+                    'Make sure both MANTIUM_USER and MANTIUM_PASSWORD are set in your env vars. Alternatively you can just set '
                     'MANTIUM_TOKEN.'
                 )
->>>>>>> df1bde5 (adding prompt details)
 
         if not self.check_expire_claim():
             return self.token
