@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #  Copyright (c) 2021 Mantium, Inc.
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +24,7 @@ import base64
 import json
 import time
 import mantiumapi.client
+from pytest import raises
 
 decoded_jwt = {
     'given_name': 'Test',
@@ -76,70 +76,70 @@ def make_jwt(decoded_jwt:str, expires_time=time.time() + 60*60, encoding='utf-8'
         json.dumps(decoded_jwt).encode(encoding)
     ).decode(encoding).rstrip('=') + "."
    
-class BasicTests(unittest.TestCase):
-    def setUp(self):
-        pass
 
-    @mock.patch.dict(
-        os.environ, {
-                'MANTIUM_USER': "user_id", 
-                'MANTIUM_PASSWORD': 'password'
-            }
-        )
-    def test_bearerauth_defaults_with_username_pass(self):
-        target = mantiumapi.client.BearerAuth()
-        self.assertIsNotNone(target.user)
-        self.assertEqual(target.user, 'user_id')
-        self.assertIsNotNone(target.password)
-        self.assertEqual(target.password, 'password')
+@mock.patch.dict(
+    os.environ, {
+            'MANTIUM_USER': "user_id", 
+            'MANTIUM_PASSWORD': 'password'
+        }
+    )
+def test_bearerauth_defaults_with_username_pass():
+    target = mantiumapi.client.BearerAuth()
+    assert target.user is not None
+    assert target.user == 'user_id'
+    assert target.password is not None
+    assert target.password == 'password'
+    assert target.token is None
+    assert target.auth_url == 'https://api.mantiumai.com/auth/login/access/token'
 
-        self.assertIsNone(target.token)
-        self.assertEqual(target.auth_url, 'https://api.mantiumai.com/auth/login/access/token')
 
-    @mock.patch('requests.post', side_effect=mocked_requests_post)
-    @mock.patch.dict(
-        os.environ, {
-                'MANTIUM_USER': "user_id",
-                'MANTIUM_PASSWORD': 'password'
-            }
-        )
-    def test_bearerauth_get_token(self, mock_post):
-        target = mantiumapi.client.BearerAuth().get_token()
-        self.assertEqual(target, make_jwt(decoded_jwt))
+@mock.patch('requests.post', side_effect=mocked_requests_post)
+@mock.patch.dict(
+    os.environ, {
+            'MANTIUM_USER': "user_id",
+            'MANTIUM_PASSWORD': 'password'
+        }
+    )
+def test_bearerauth_get_token(mock_post):
+    target = mantiumapi.client.BearerAuth().get_token()
+    assert target == make_jwt(decoded_jwt)
 
-    @mock.patch('requests.post', side_effect=mocked_requests_post)
-    @mock.patch.dict(
-        os.environ, {
-                'MANTIUM_USER': '',
-                'MANTIUM_PASSWORD': '',
-                'MANTIUM_TOKEN': ''
-            }
-        )
-    def test_bearerauth_no_token_username_or_pass(self, mock_post):
-        with self.assertRaises(ValueError):
-            mantiumapi.client.BearerAuth().get_token()
 
-    @mock.patch.dict(
-        os.environ, {
-                'MANTIUM_USER': '',
-                'MANTIUM_PASSWORD': '',
-                'MANTIUM_TOKEN': make_jwt(decoded_jwt, expires_time=time.time() - 60*60)
-            }
-        )
-    def test_bearerauth_check_expire_claim_expired_token(self):
-        client = mantiumapi.client.BearerAuth()
-        target = client.check_expire_claim()
-        self.assertTrue(target)
+@mock.patch('requests.post', side_effect=mocked_requests_post)
+@mock.patch.dict(
+    os.environ, {
+            'MANTIUM_USER': '',
+            'MANTIUM_PASSWORD': '',
+            'MANTIUM_TOKEN': ''
+        }
+    )
+def test_bearerauth_no_token_username_or_pass(mock_post):
+    with raises(ValueError):
+        mantiumapi.client.BearerAuth().get_token()
 
-    @mock.patch.dict(
-        os.environ, {
-                "MANTIUM_USER": '',
-                'MANTIUM_PASSWORD': '',
-                'MANTIUM_TOKEN': make_jwt(decoded_jwt, expires_time=time.time() + 60*60)
-            }
-        )
-    def test_bearerauth_check_expire_claim_unexpired_token(self):
-        client = mantiumapi.client.BearerAuth()
-        target = client.check_expire_claim()
-        self.assertFalse(target)
+
+@mock.patch.dict(
+    os.environ, {
+            'MANTIUM_USER': '',
+            'MANTIUM_PASSWORD': '',
+            'MANTIUM_TOKEN': make_jwt(decoded_jwt, expires_time=time.time() - 60*60)
+        }
+    )
+def test_bearerauth_check_expire_claim_expired_token():
+    client = mantiumapi.client.BearerAuth()
+    target = client.check_expire_claim()
+    assert target is True
+
+
+@mock.patch.dict(
+    os.environ, {
+            "MANTIUM_USER": '',
+            'MANTIUM_PASSWORD': '',
+            'MANTIUM_TOKEN': make_jwt(decoded_jwt, expires_time=time.time() + 60*60)
+        }
+    )
+def test_bearerauth_check_expire_claim_unexpired_token():
+    client = mantiumapi.client.BearerAuth()
+    target = client.check_expire_claim()
+    assert target is False
 
