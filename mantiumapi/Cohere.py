@@ -1,4 +1,4 @@
-# Cohere Prompt Settings
+"""Cohere Prompt Settings"""
 
 from enum import Enum
 
