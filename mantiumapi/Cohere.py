@@ -1,10 +1,13 @@
 """Cohere Prompt Settings"""
 
+from .engine_id_values import default_ai_engines
+from .utils import get_engine_id
+from .prompt import Prompt
 from enum import Enum
 
 
 class DefaultEngine(Enum):
-    """Must have a default engine"""
+    """Must have a default engine, constrained to engines available to Cohere."""
 
     shrimp = 'shrimp'
     otter = 'otter'
@@ -14,7 +17,7 @@ class DefaultEngine(Enum):
 
 
 class AiMethod(Enum):
-    """Must have an endpoint (ai_method)"""
+    """Must have an endpoint (ai_method), constrained to engines available to Cohere."""
 
     generate = 'generate'
     choose_best = 'choose_best'
@@ -23,7 +26,7 @@ class AiMethod(Enum):
     similarity = 'similarity'  # only functional with shrimp or seal
 
 
-class Cohere(object):
+class Cohere(Prompt):
     """
     default_engine: shrimp, otter, seal, shark, orca
     ai_method: generate, choose_best, likelihood, embed, similarity
@@ -84,6 +87,7 @@ class Cohere(object):
             raise Exception('default_engine must be one of: shrimp|otter|seal|shark|orca')
 
         self.default_engine = default_engine.value
+        self.ai_engine_id = get_engine_id(self.default_engine)
 
         if not isinstance(ai_method, AiMethod):
             raise Exception('ai_method must be: generate|choose_best|likelihood|embed|similarity')

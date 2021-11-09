@@ -16,13 +16,11 @@
 # Please refer to our terms for more information:
 #     https://mantiumai.com/terms-of-use/
 #
-from .Ai21 import Ai21
-from .Cohere import Cohere
-from .Mantium import Mantium
-from .OpenAi import OpenAi
+from . import ai21
+from . import cohere
+from . import mantium
+from . import openai
 from .prompt import Prompt
-from .engine_id_values import default_ai_engines
-from .utils import get_engine_id
 from .tag import Tag
 from .intelet import Intelet
 from .log import Log
