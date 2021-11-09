@@ -16,10 +16,8 @@
 # Please refer to our terms for more information:
 #     https://mantiumai.com/terms-of-use/
 #
-from . import ai21
-from . import cohere
-from . import mantium
-from . import openai
+
+import openai
 from .prompt import Prompt
 from .tag import Tag
 from .intelet import Intelet
@@ -42,7 +40,7 @@ from jsonapi_requests.data import (
 from jsonapi_requests import data
 
 __all__ = [
-    'Prompt',
+    'OpenAi' 'Prompt',
     'Tag',
     'Intelet',
     'Log',

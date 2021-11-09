@@ -23,9 +23,6 @@ from .intelet import Intelet
 from .execute import PromptExecution
 
 
-# Create a class to retrieve all available engines by id - boto3
-
-
 class Prompt(ApiModel):
     """Mantium Prompt Endpoint
 
