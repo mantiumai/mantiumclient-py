@@ -1,9 +1,13 @@
+"""OpenAI Prompts"""
+
 from .prompt import Prompt
+from .engine_id_values import default_ai_engines
+from .utils import get_engine_id
 from enum import Enum
 
 
 class DefaultEngine(str, Enum):
-    """Must have a default engine"""
+    """Must have a default engine, constrained to engines available to OpenAI."""
 
     davinci = 'davinci'
     curie = 'curie'
@@ -11,8 +15,8 @@ class DefaultEngine(str, Enum):
     ada = 'ada'
 
 
-class AiMethod(Enum):
-    """Must have an endpoint (ai_method)"""
+class AiMethod(str, Enum):
+    """Must have an endpoint (ai_method), constrained to engines available to OpenAI."""
 
     completions = 'completions'
     search = 'search'
@@ -23,13 +27,21 @@ class AiMethod(Enum):
 class OpenAi(Prompt):
 
     """
-    default_engine: davinci, curie, babbage, ada
-    ai_method: completions, search, classifications, answers  # codex??
+    OpenAI Prompt class, inherits from Prompt.
+    Required parameters: default_engine, ai_method
+
+    default_engine: davinci, curie, babbage, ada, davinci-codex, cushman-codex
+    ai_method: completions, search, classifications, answers, codex
 
     ***Settings***
     maxTokens: Max 2048 (incl. input)
     temperature: [0,1] inclusive
-    topP: [0,1] inclusive"""
+    topP: [0,1] inclusive
+
+    ***Example Prompt Instance***
+    openai_prompt = OpenAi(default_engine=DefaultEngine.davinci, ai_method = AiMethod.classifications)
+
+    """
 
     ai_provider = 'openai'
 
@@ -39,6 +51,7 @@ class OpenAi(Prompt):
             raise Exception('default_engine must be one of: j1_jumbo|j1_large')
 
         self.default_engine = default_engine.value
+        self.ai_engine_id = get_engine_id(default_engine.value)
 
         if not isinstance(ai_method, AiMethod):
             raise Exception('ai_method must be: complete')

@@ -1,29 +1,39 @@
-# Mantium Prompt Settings
+"""Mantium Prompts"""
 
+from .prompt import Prompt
+from .engine_id_values import default_ai_engines
+from .utils import get_engine_id
 from enum import Enum
 
 
-class DefaultEngine(Enum):
-    """Must have a default engine"""
+class DefaultEngine(str, Enum):
+    """Must have a default engine, constrained to engines available to Mantium."""
 
     iron = 'iron'
 
 
-class AiMethod(Enum):
-    """Must have an endpoint (ai_method)"""
+class AiMethod(str, Enum):
+    """Must have an endpoint (ai_method), constrained to engines available to Mantium."""
 
     wordsmith = 'Wordsmith'
 
 
-class Mantium(object):
+class Mantium(Prompt):
     """
-    default_engine: j1_jumbo, j1_large
-    ai_method: complete
+    Mantium Prompt class, inherits from Prompt.
+    Required parameters: default_engine, ai_method
+
+    default_engine: iron
+    ai_method: Wordsmith
 
     ***Settings***
     maxTokens: Max 2048 (incl. input)
     temperature: [0,1] inclusive
-    topP: [0,1] inclusive"""
+    topP: [0,1] inclusive
+
+    ***Example Prompt Instance***
+    mantium_prompt = Mantium(default_engine=DefaultEngine.iron, ai_method = AiMethod.Wordsmith)
+    """
 
     def __init__(self, default_engine, ai_method):
 
@@ -33,44 +43,9 @@ class Mantium(object):
             raise Exception('default_engine must be one of: DefaultEngine. + iron')
 
         self.default_engine = default_engine.value
+        self.ai_engine_id = get_engine_id(self.default_engine)
 
         if not isinstance(ai_method, AiMethod):
             raise Exception('ai_method must be: complete')
 
         self.ai_method = ai_method.value
-
-
-# export interface WordsmithPromptParametersInterface {
-#   basic_settings: WordsmithPromptParametersBasicSettingsInterface;
-#   default_engine: string;
-# }
-
-# interface WordsmithPromptParametersBasicSettingsInterface {
-#   temperature: number;
-#   top_p: number;
-# }
-
-# export type WordsmithPromptAttributes = WordsmithAttributes & DeployMetadata;
-
-# interface WordsmithAttributes {
-#   ai_method: "Wordsmith";
-#   ai_provider: string;
-#   created_at: string;
-#   ai_engine_id: string;
-#   description: string;
-#   last_activity: string;
-#   name: string;
-#   prompt_id: string;
-#   prompt_parameters: WordsmithPromptParametersInterface;
-#   prompt_text: string;
-#   status: string;
-# }
-
-# export interface WordsmithCurlResponseAttributesInterface {
-#   endpoint: string;
-#   ai_method: "wordsmith";
-#   ai_provider: string;
-#   context: string;
-#   temp: number;
-#   top_p: number;
-# }
