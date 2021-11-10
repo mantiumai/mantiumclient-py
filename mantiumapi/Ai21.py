@@ -1,8 +1,8 @@
 """AI21 Prompts"""
 
-from .engine_id_values import default_ai_engines
-from .utils import get_engine_id
-from .prompt import Prompt
+from engine_id_values import default_ai_engines
+from utils import get_engine_id
+from prompt import Prompt
 from enum import Enum
 
 
@@ -17,6 +17,9 @@ class AiMethod(str, Enum):
     """Must have an endpoint (ai_method), constrained to endpoints available to AI21."""
 
     complete = 'complete'
+
+
+print(default_ai_engines)
 
 
 class Ai21(Prompt):

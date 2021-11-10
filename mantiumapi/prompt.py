@@ -18,9 +18,9 @@
 #
 from jsonapi_requests.orm import ApiModel, AttributeField, repositories, RelationField
 
-from .client import orm_api
-from .intelet import Intelet
-from .execute import PromptExecution
+from client import orm_api
+from intelet import Intelet
+from execute import PromptExecution
 
 
 class Prompt(ApiModel):
