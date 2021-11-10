@@ -57,27 +57,6 @@ ENGINEBYPROVIDER = {
   }
 }
 
-# ENGINEBYNAME = {
-#   "data": {
-#     "id": "a7beb6e1-a107-41ad-b7a1-f1ba97d064a3",
-#     "type": "ai_engine",
-#     "attributes": {
-#       "name": "baseline-shrimp",
-#       "description": "Smallest Universal Model.  SentEval Benchmarks:  Similarity Tasks 0.82, Downstream Tasks: 0.81, Probing Tasks: 0.71",
-#       "use_cases": "generate, likelihood, choose-best, embed, similarity",
-#       "ai_provider": "Cohere",
-#       "cost_ranking": "24",
-#       "ai_engine_id": "a7beb6e1-a107-41ad-b7a1-f1ba97d064a3",
-#       "status": "READY",
-#       "base_model_name": "",
-#       "created_date": "None"
-#     },
-#     "relationships": {}
-#   },
-#   "included": [],
-#   "meta": {},
-#   "links": {}
-# }
 
 
 def mocked_requests(*args, **kwargs):
