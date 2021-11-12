@@ -8,8 +8,8 @@ install:
 - pip install -r requirements.txt
 - pip install pytest
 script:
-- python setup.py sdist
 - pytest
+- python setup.py sdist
 deploy:
   provider: pypi
   username: "__token__"
