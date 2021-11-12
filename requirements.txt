@@ -1,0 +1,4 @@
+jsonapi-requests==0.6.2
+requests==2.25.1
+PyJWT==2.1.0
+tenacity==7.0.0
