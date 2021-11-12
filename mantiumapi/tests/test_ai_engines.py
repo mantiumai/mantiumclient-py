@@ -81,12 +81,6 @@ def mocked_requests(*args, **kwargs):
         == 'https://api.mantiumai.com/v1/ai/engine/get/ai/providers/OpenAI'
     ):
         return MockResponse(ENGINEBYPROVIDER, 200)
-    # elif (
-    #     args[0] == 'GET'
-    #     and args[1]
-    #     == 'https://api.mantiumai.com/v1/ai/engine/get/name/baseline-shrimp'
-    # ):
-    #     return MockResponse(ENGINEBYNAME, 200)
     else:
         return MockResponse('', 404)
 
