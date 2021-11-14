@@ -1,8 +1,6 @@
-import unittest
 from unittest import mock
 
-from mantiumapi import Log
-import mantiumapi
+from mantiumapi.log import Log
 
 LOG = {
   "data": [
@@ -84,9 +82,8 @@ def mocked_requests(*args, **kwargs):
     side_effect=mocked_requests,
 )
 def test_log(mock_get):
-    # target = mantiumapi.log.Log.from_id('9b1a8459-e867-419e-944f-f241e46f2ae2')
-    target = mantiumapi.log.Log.get_list()
-    assert isinstance(target[0], mantiumapi.log.Log)
+    target = Log.get_list()
+    assert isinstance(target[0], Log)
     assert target[0].log_id == '9b1a8459-e867-419e-944f-f241e46f2ae2'
     assert target[0].organization_id == 'df3d8e89-50cb-48f9-a121-8c641c88fd99'
     assert target[0].log_type == 'PROMPT'
