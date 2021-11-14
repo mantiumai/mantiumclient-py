@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "mantiumclient-py"
+version = "0.1.0"
+description = "Python Client for the Mantium API"
+authors = ["Mantium <support@mantiumai.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+jsonapi-requests = "0.6.2"
+requests = "2.25.1"
+PyJWT = "2.1.0"
+tenacity = "7.0.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.5"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
