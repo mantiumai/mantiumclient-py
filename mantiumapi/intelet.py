@@ -16,14 +16,10 @@
 # Please refer to our terms for more information:
 #     https://mantiumai.com/terms-of-use/
 #
+from jsonapi_requests.orm import ApiModel, AttributeField, RelationField, repositories
+
 from .client import orm_api
 from .execute import InteletExecution
-from jsonapi_requests.orm import (
-    ApiModel,
-    AttributeField,
-    RelationField,
-    repositories,
-)
 
 
 class Intelet(ApiModel):
@@ -68,7 +64,6 @@ class Intelet(ApiModel):
     deploy_type = AttributeField('deploy_type')
     deploy_allow_input = AttributeField('deploy_allow_type')
     deploy_status = AttributeField('deploy_status')
-
 
     @classmethod
     def get_result(cls, intelet_execution_id):

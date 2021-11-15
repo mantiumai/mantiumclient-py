@@ -17,4 +17,3 @@
 #     https://mantiumai.com/terms-of-use/
 #
 __version__ = '0.1.51'
-

@@ -16,42 +16,43 @@
 # Please refer to our terms for more information:
 #     https://mantiumai.com/terms-of-use/
 #
-from .prompt import Prompt
-from .tag import Tag
-from .intelet import Intelet
-from .log import Log
-from .execute import PromptExecution, InteletExecution
-from .ai_engines import AiEngine
-from .ai_methods import AiMethod
-from .files import Files
-from .apikey import APIKey
-from .security import Policy, Rule, Action
+from jsonapi_requests import data
 from jsonapi_requests.data import (
-    Record,
+    Dictionary,
     JsonApiObject,
+    List,
+    Record,
+    Scalar,
     SchemaAlternativeWrapper,
     make_collection,
-    List,
-    Scalar,
-    Dictionary,
 )
-from jsonapi_requests import data
+
+from .ai_engines import AiEngine
+from .ai_methods import AiMethod
+from .apikey import APIKey
+from .execute import InteletExecution, PromptExecution
+from .files import Files
+from .intelet import Intelet
+from .log import Log
+from .prompt import Prompt
+from .security import Action, Policy, Rule
+from .tag import Tag
 
 __all__ = [
     'Prompt',
-    'Tag', 
-    'Intelet', 
-    'Log', 
-    'PromptExecution', 
-    'InteletExecution', 
+    'Tag',
+    'Intelet',
+    'Log',
+    'PromptExecution',
+    'InteletExecution',
     'AiEngine',
     'AiMethod',
     'Files',
     'APIKey',
     'Policy',
     'Rule',
-    'Action'
-    ]
+    'Action',
+]
 
 
 class MJsonApiResponse(Record):

@@ -11,11 +11,11 @@ lint:
 	@echo
 	blue --check --diff --color .
 	@echo
-	flake8 .
+	# flake8 .
 	@echo
-	mypy --ignore-missing-imports .
+	# mypy --ignore-missing-imports .
 	@echo
-	bandit -r mantiumapi
+	# bandit -r mantiumapi
 
 
 format:

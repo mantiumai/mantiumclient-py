@@ -16,11 +16,13 @@
 # Please refer to our terms for more information:
 #     https://mantiumai.com/terms-of-use/
 #
-from posixpath import basename
-import requests
 import os
-from .client import orm_api
+from posixpath import basename
+
+import requests
 from jsonapi_requests.orm import ApiModel, AttributeField
+
+from .client import orm_api
 
 
 class Files(ApiModel):
@@ -55,9 +57,7 @@ class Files(ApiModel):
         filename = os.path.basename(file)
 
         if purpose not in purposes:
-            raise ValueError(
-                f"Purpose '{purpose}' must be 'classifcations', 'search', or 'answers'"
-            )
+            raise ValueError(f"Purpose '{purpose}' must be 'classifcations', 'search', or 'answers'")
 
         response = cls._options.api.endpoint(signature_endpoint).post(
             json={
@@ -71,19 +71,15 @@ class Files(ApiModel):
         with open(file, 'rb') as data:
             response = requests.put(url, data=data)
             if response.status_code != 200:
-                raise Exception(
-                    'Unexpected issue while uploading file. '
-                    'Status Code: ' + str(response.status_code)
-                )
+                raise Exception('Unexpected issue while uploading file. ' 'Status Code: ' + str(response.status_code))
 
     @classmethod
     def delete(cls, id):
         delete_endpoint = f'files/{id}'
         orm_api.endpoint(delete_endpoint).delete()
-       
+
 
 class File:
-
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
