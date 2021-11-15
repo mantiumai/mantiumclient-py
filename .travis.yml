@@ -6,7 +6,7 @@ python:
 - '3.9'
 install: 
 - pip install poetry
-- if [[ $TRAVIS_PYTHON_VERSION < 3.9 ]]; then poetry install --no-dev -E pytest -E pytest-cov; else poetry install; fi
+- if [[ $TRAVIS_PYTHON_VERSION < 3.9 ]]; then poetry install --no-dev && poetry add --dev pytest pytest-cov; else poetry install; fi
 script:
 - if [[ $TRAVIS_PYTHON_VERSION < 3.9 ]]; then poetry run make test_only; else poetry run make test; fi
 - python setup.py sdist
