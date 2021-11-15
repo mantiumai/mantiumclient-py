@@ -5,10 +5,10 @@ python:
 - '3.8'
 - '3.9'
 install: 
-- curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python -
-- if [[ $TRAVIS_PYTHON_VERSION < 3.9 ]]; then poetry install --no-dev && poetry run pip install pytest pytest-cov; else poetry install; fi
+- curl https://install.python-poetry.org | python -
+- if [[ "$TRAVIS_PYTHON_VERSION" < "3.9" ]]; then poetry install --no-dev && poetry run pip install pytest pytest-cov; else poetry install; fi
 script:
-- if [[ $TRAVIS_PYTHON_VERSION < 3.9 ]]; then poetry run make test_only; else poetry run make test; fi
+- if [[ "$TRAVIS_PYTHON_VERSION" < "3.9" ]]; then poetry run make test_only; else poetry run make test; fi
 - python setup.py sdist
 deploy:
   provider: pypi
