@@ -24,8 +24,20 @@ from jsonapi_requests.orm import OrmApi
 from requests.auth import AuthBase
 from .version import __version__
 
+"""Mantium Authorization Endpoint
+
+Set username and password, retrieve Bearer token to interact with the Mantium API.
+
+Set MANTIUM_USER and MANTIUM_PASSWORD:
+Linux/macOS:
+    export MANTIUM_USER='your_username'
+    export MANTIUM_TOKEN='your_password'
+
+
+"""
 ROOT_URL = os.getenv('ROOT_URL', 'https://api.mantiumai.com')
 version = __version__
+
 
 def is_none_or_empty(value):
     return not (value and value.strip())
@@ -66,8 +78,10 @@ class BearerAuth(AuthBase):
     def get_token(self):
         if is_none_or_empty(self.token):
             if is_none_or_empty(self.user) or is_none_or_empty(self.password):
-                raise ValueError('Make sure both MANTIUM_USER and MANTIUM_PASSWORD are set in your env vars. Alternatively you can just set '
-                                    'MANTIUM_TOKEN.')
+                raise ValueError(
+                    'Make sure both MANTIUM_USER and MANTIUM_PASSWORD are set in your env vars. Alternatively you can just set '
+                    'MANTIUM_TOKEN.'
+                )
 
         if not self.check_expire_claim():
             return self.token
@@ -78,19 +92,15 @@ class BearerAuth(AuthBase):
         elif r.status_code == 422:
             raise ValueError('Credentials were unprocessable by the API.')
         elif r.status_code != 200:
-            raise Exception('Unexpected issue while attempting to authenticate to the Mantium API. '
-                            'Status Code: ' + str(r.status_code)) 
+            raise Exception(
+                'Unexpected issue while attempting to authenticate to the Mantium API. '
+                'Status Code: ' + str(r.status_code)
+            )
         elif r.status_code == 200:
             self.token = r.json()['data']['attributes']['bearer_id']
             return self.token
 
 
 orm_api = OrmApi.config(
-    {
-        'API_ROOT': ROOT_URL + '/v1', 
-        'AUTH': BearerAuth(), 
-        'VALIDATE_SSL': True, 
-        'TIMEOUT': 5, 
-        'APPEND_SLASH': False
-    }
+    {'API_ROOT': ROOT_URL + '/v1', 'AUTH': BearerAuth(), 'VALIDATE_SSL': True, 'TIMEOUT': 5, 'APPEND_SLASH': False}
 )
