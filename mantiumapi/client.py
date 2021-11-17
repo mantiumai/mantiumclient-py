@@ -26,12 +26,29 @@ from .version import __version__
 
 """Mantium Authorization Endpoint
 
-Set username and password, retrieve Bearer token to interact with the Mantium API.
+Set username and password, retrieve bearer token to interact with the Mantium API.
 
-Set MANTIUM_USER and MANTIUM_PASSWORD:
+Available Methods:
+check_expire_claim() : check if the bearer token has expired.
+get_token() : retrieve a bearer token using set username and password.
+
+Set MANTIUM_USER and MANTIUM_PASSWORD in environment variables:
 Linux/macOS:
     export MANTIUM_USER='your_username'
-    export MANTIUM_TOKEN='your_password'
+    export MANTIUM_PASSWORD='your_password'
+
+Windows:
+    set MANTIUM_USER='your_username'
+    set MANTIUM_PASSWORD='your_password'
+
+Example:
+to test if the variables were properly set:
+>>> import os
+>>> print(os.getenv('MANTIUM_USER'), os.getenv('MANTIUM_PASSWORD'))
+
+to retrieve a bearer token:
+>>> user_object = BearerAuth()
+>>> token = user_object.get_token()
 
 
 """

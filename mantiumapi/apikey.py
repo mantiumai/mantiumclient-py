@@ -26,15 +26,15 @@ class APIKey(ApiModel):
 
     Must be used with a valid ai_provider and api_key attribute. To set:
         >>> api_key = APIKey()
-        >>> api_key.ai_provider = provider: str (MUST BE ALL LOWERCASE)
+        >>> api_key.ai_provider = provider: str
         >>> api_key.api_key = your_api_key: str
 
     Available methods:
     validate(api_key: str, ai_provider: str) : validate if the set API key is valid -> bool
-    create(): create and save Provider API Key
-    update():
-    save():
-    delete(): delete API from stored Provider endpoint
+    create() : create and save Provider API Key
+    update() : currently functions as .create()
+    save() : currently functions as .create()
+    delete() : delete API from stored Provider endpoint
 
     """
 
@@ -43,7 +43,7 @@ class APIKey(ApiModel):
         path = 'provider/api_keys'
         api = orm_api
 
-    ai_provider = AttributeField('ai_provider')
+    ai_provider = AttributeField(('ai_provider').lower())
     api_key = AttributeField('api_key')
     verified = AttributeField('verified')
     created = AttributeField('created')

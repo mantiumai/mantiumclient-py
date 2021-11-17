@@ -18,7 +18,25 @@
 #
 from .client import orm_api
 
+
 class PromptExecution:
+    """Prompt Execution Options - for prompts that have triggered HITL (human in the loop)
+    Must be set with a prompt_execution_id
+    Example:
+    >>> prompt_execution = PromptExecution(prompt_execution_id="12345")
+
+
+    Available Methods:
+    get_list_hitl() : returns a list of prompts that have triggered HITL
+    refresh() : refresh HITL prompts list
+    hitl_accept() : accept the HITL prompt as is
+    hitl_reject() : reject the HITL prompt and refresh
+    hitl_modify_output(new_output) : modify the HITL prompt output and refresh
+    hitl_modify_input(new_input) : modify the HITL prompt input and refresh
+
+    
+"""
+
     def __init__(self, prompt_execution_id, obj=''):
         self.prompt_execution_id = prompt_execution_id
         if obj:
@@ -37,7 +55,7 @@ class PromptExecution:
                 self.hitl_info = obj['hitl_info']
             else:
                 self.hitl_info = '{}'
-                
+
         if not hasattr(self, 'status'):
             self.refresh()
 
@@ -78,7 +96,6 @@ class PromptExecution:
 
 
 class InteletExecution:
-
     def __init__(self, intelet_execution_id, obj=''):
         self.intelet_execution_id = intelet_execution_id
         if obj:
