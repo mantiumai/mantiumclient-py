@@ -16,6 +16,7 @@
 # Please refer to our terms for more information:
 #     https://mantiumai.com/terms-of-use/
 #
+from jsonapi_requests.base import Api
 from jsonapi_requests.orm import ApiModel, AttributeField, repositories, RelationField
 
 from .client import orm_api
@@ -25,8 +26,8 @@ from .execute import PromptExecution
 
 def register(self, model):
     type = model._options.type
-    # if type in self.registry:
-    #    raise OrmException('Api already has model of this type')
+    if not type == 'prompt' and type in self.registry:
+        raise OrmException('Api already has model of this type')
     self.registry[type] = model
 
 

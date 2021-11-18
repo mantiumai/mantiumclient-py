@@ -1,6 +1,6 @@
 """AI21 Prompts"""
+from jsonapi_requests.base import Api
 
-# from .engine_id_values import default_ai_engines
 from .utils import get_engine_id
 from .prompt import Prompt
 from enum import Enum
@@ -19,10 +19,7 @@ class AiMethod(str, Enum):
     complete = 'complete'
 
 
-print(default_ai_engines)
-
-
-class Ai21(Prompt):
+class Ai21(Prompt, ApiModel.Prompt):
 
     """
     AI21 Prompt class, inherits from Prompt.
