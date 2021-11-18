@@ -23,6 +23,16 @@ from intelet import Intelet
 from execute import PromptExecution
 
 
+def register(self, model):
+    type = model._options.type
+    # if type in self.registry:
+    #    raise OrmException('Api already has model of this type')
+    self.registry[type] = model
+
+
+ApiModel.register = register
+
+
 class Prompt(ApiModel):
     """Mantium Prompt Endpoint
 
