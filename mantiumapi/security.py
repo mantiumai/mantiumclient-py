@@ -159,3 +159,10 @@ class Action(ApiModel):
         repository = repositories.Repository(self._options.api.type_registry)
         repository.add(self)
         repository.update_from_api_response(jsonapi_response)
+
+
+class PromptPolicy(ApiModel):
+
+    class Meta:
+        type = "prompt_policy"
+        api = orm_api
