@@ -17,6 +17,7 @@
 #     https://mantiumai.com/terms-of-use/
 #
 from jsonapi_requests.orm import ApiModel, AttributeField, repositories
+
 from .client import orm_api
 
 
@@ -161,7 +162,6 @@ class Action(ApiModel):
 
 
 class PromptPolicy(ApiModel):
-
     class Meta:
-        type = "prompt_policy"
+        type = 'prompt_policy'
         api = orm_api

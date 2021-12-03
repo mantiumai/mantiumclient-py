@@ -18,6 +18,7 @@
 #
 from .client import orm_api
 
+
 class PromptExecution:
     def __init__(self, prompt_execution_id, obj=''):
         self.prompt_execution_id = prompt_execution_id
@@ -37,7 +38,7 @@ class PromptExecution:
                 self.hitl_info = obj['hitl_info']
             else:
                 self.hitl_info = '{}'
-                
+
         if not hasattr(self, 'status'):
             self.refresh()
 
@@ -78,7 +79,6 @@ class PromptExecution:
 
 
 class InteletExecution:
-
     def __init__(self, intelet_execution_id, obj=''):
         self.intelet_execution_id = intelet_execution_id
         if obj:

@@ -15,33 +15,33 @@
 # Please refer to our terms for more information:
 #     https://mantiumai.com/terms-of-use/
 #
-import os
-import unittest
-from unittest import mock
-from datetime import datetime, timedelta
-
 import base64
 import json
+import os
 import time
-import mantiumapi.client
+import unittest
+from datetime import datetime, timedelta
+from unittest import mock
+
 from pytest import raises
+
+import mantiumapi.client
 
 decoded_jwt = {
     'given_name': 'Test',
     'family_name': 'User',
-    'nickname':
-    'rick', 
-    'name': 'Test User', 
+    'nickname': 'rick',
+    'name': 'Test User',
     'picture': 'https://s.gravatar.com/avatar/31201667409165d2ebb4472d7e01ccd2?s=480&r=pg',
     'updated_at': '2021-03-24T18:11:02.938Z',
-    'email': 'test@fakesite.com', 
+    'email': 'test@fakesite.com',
     'email_verified': True,
-    'iss': 'https://fakesite.com/', 
-    'sub': '23r5tewgsdsdkjg', 
-    'aud': 'ABCDEFG', 
-    'iat': time.time(), 
-    'exp': time.time() + 60*60
- }
+    'iss': 'https://fakesite.com/',
+    'sub': '23r5tewgsdsdkjg',
+    'aud': 'ABCDEFG',
+    'iat': time.time(),
+    'exp': time.time() + 60 * 60,
+}
 
 
 def mocked_requests_post(*args, **kwargs):
@@ -53,36 +53,37 @@ def mocked_requests_post(*args, **kwargs):
         def json(self):
             return self.json_data
 
-    return MockResponse({
-                            "data": {
-                                "id": "f79fbc7f-bbd3-4c4a-852a-c2cecbc5aac6",
-                                "attributes": {
-                                "bearer_id": make_jwt(decoded_jwt),
-                                "expires_on": time.time() + 60*60,
-                                "token_type": "Bearer"
-                                },
-                                "relationships": {}
-                            },
-                            "included": None,
-                            "meta": None,
-                            "links": None
-                            }, 200)
-
-    return MockResponse({"detail":"invalid_request"}, 400)
-
-def make_jwt(decoded_jwt:str, expires_time=time.time() + 60*60, encoding='utf-8'):
-    decoded_jwt['exp'] = expires_time
-    return "eyJhbGciOiJOb25lIiwidHlwIjoiSldUIiwia2lkIjoibDdhNkVkcVExRmJ6dm9ZOTUwWEsyIn0." + base64.urlsafe_b64encode(
-        json.dumps(decoded_jwt).encode(encoding)
-    ).decode(encoding).rstrip('=') + "."
-   
-
-@mock.patch.dict(
-    os.environ, {
-            'MANTIUM_USER': "user_id", 
-            'MANTIUM_PASSWORD': 'password'
-        }
+    return MockResponse(
+        {
+            'data': {
+                'id': 'f79fbc7f-bbd3-4c4a-852a-c2cecbc5aac6',
+                'attributes': {
+                    'bearer_id': make_jwt(decoded_jwt),
+                    'expires_on': time.time() + 60 * 60,
+                    'token_type': 'Bearer',
+                },
+                'relationships': {},
+            },
+            'included': None,
+            'meta': None,
+            'links': None,
+        },
+        200,
     )
+
+    return MockResponse({'detail': 'invalid_request'}, 400)
+
+
+def make_jwt(decoded_jwt: str, expires_time=time.time() + 60 * 60, encoding='utf-8'):
+    decoded_jwt['exp'] = expires_time
+    return (
+        'eyJhbGciOiJOb25lIiwidHlwIjoiSldUIiwia2lkIjoibDdhNkVkcVExRmJ6dm9ZOTUwWEsyIn0.'
+        + base64.urlsafe_b64encode(json.dumps(decoded_jwt).encode(encoding)).decode(encoding).rstrip('=')
+        + '.'
+    )
+
+
+@mock.patch.dict(os.environ, {'MANTIUM_USER': 'user_id', 'MANTIUM_PASSWORD': 'password'})
 def test_bearerauth_defaults_with_username_pass():
     target = mantiumapi.client.BearerAuth()
     assert target.user is not None
@@ -94,37 +95,27 @@ def test_bearerauth_defaults_with_username_pass():
 
 
 @mock.patch('requests.post', side_effect=mocked_requests_post)
-@mock.patch.dict(
-    os.environ, {
-            'MANTIUM_USER': "user_id",
-            'MANTIUM_PASSWORD': 'password'
-        }
-    )
+@mock.patch.dict(os.environ, {'MANTIUM_USER': 'user_id', 'MANTIUM_PASSWORD': 'password'})
 def test_bearerauth_get_token(mock_post):
     target = mantiumapi.client.BearerAuth().get_token()
     assert target == make_jwt(decoded_jwt)
 
 
 @mock.patch('requests.post', side_effect=mocked_requests_post)
-@mock.patch.dict(
-    os.environ, {
-            'MANTIUM_USER': '',
-            'MANTIUM_PASSWORD': '',
-            'MANTIUM_TOKEN': ''
-        }
-    )
+@mock.patch.dict(os.environ, {'MANTIUM_USER': '', 'MANTIUM_PASSWORD': '', 'MANTIUM_TOKEN': ''})
 def test_bearerauth_no_token_username_or_pass(mock_post):
     with raises(ValueError):
         mantiumapi.client.BearerAuth().get_token()
 
 
 @mock.patch.dict(
-    os.environ, {
-            'MANTIUM_USER': '',
-            'MANTIUM_PASSWORD': '',
-            'MANTIUM_TOKEN': make_jwt(decoded_jwt, expires_time=time.time() - 60*60)
-        }
-    )
+    os.environ,
+    {
+        'MANTIUM_USER': '',
+        'MANTIUM_PASSWORD': '',
+        'MANTIUM_TOKEN': make_jwt(decoded_jwt, expires_time=time.time() - 60 * 60),
+    },
+)
 def test_bearerauth_check_expire_claim_expired_token():
     client = mantiumapi.client.BearerAuth()
     target = client.check_expire_claim()
@@ -132,14 +123,14 @@ def test_bearerauth_check_expire_claim_expired_token():
 
 
 @mock.patch.dict(
-    os.environ, {
-            "MANTIUM_USER": '',
-            'MANTIUM_PASSWORD': '',
-            'MANTIUM_TOKEN': make_jwt(decoded_jwt, expires_time=time.time() + 60*60)
-        }
-    )
+    os.environ,
+    {
+        'MANTIUM_USER': '',
+        'MANTIUM_PASSWORD': '',
+        'MANTIUM_TOKEN': make_jwt(decoded_jwt, expires_time=time.time() + 60 * 60),
+    },
+)
 def test_bearerauth_check_expire_claim_unexpired_token():
     client = mantiumapi.client.BearerAuth()
     target = client.check_expire_claim()
     assert target is False
-

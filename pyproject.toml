@@ -13,7 +13,26 @@ tenacity = "7.0.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
+pytest-cov = "^3.0.0"
+isort = "^5.10.1"
+mypy = "^0.910"
+flake8 = "3.8.4"
+blue = "^0.7.0"
+bandit = "^1.7.1"
+flake8-debugger = "^4.0.0"
+flake8-pytest-style = "^1.5.1"
+typed-ast = "^1.5.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
+line_length = 120
+
+[tool.blue]
+line-length = 120
+
+[tool.pytest.ini_options]
+filterwarnings = ["ignore::DeprecationWarning"]

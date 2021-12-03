@@ -16,11 +16,11 @@
 # Please refer to our terms for more information:
 #     https://mantiumai.com/terms-of-use/
 #
-from jsonapi_requests.orm import ApiModel, AttributeField, repositories, RelationField
+from jsonapi_requests.orm import ApiModel, AttributeField, RelationField, repositories
 
 from .client import orm_api
-from .intelet import Intelet
 from .execute import PromptExecution
+from .intelet import Intelet
 
 
 class Prompt(ApiModel):
@@ -107,15 +107,15 @@ class Prompt(ApiModel):
         for k, _ in self.attributes.items():
             object[k] = self.attributes[k]
         if 'intelets' in self.relationship_cache:
-            object['intelets']=[]
+            object['intelets'] = []
             for i in self.relationship_cache['intelets']:
                 object['intelets'].append(i.id)
-        if 'tags'  in self.relationship_cache:
+        if 'tags' in self.relationship_cache:
             object['tags'] = []
             for t in self.relationship_cache['tags']:
                 object['tags'].append(t.id)
         if 'security_policies' in self.relationship_cache:
-            object['policies']=[]
+            object['policies'] = []
             for p in self.relationship_cache['security_policies']:
                 object['policies'].append(p.id)
         api_response = self.endpoint.patch(json=object)
@@ -130,7 +130,7 @@ class Prompt(ApiModel):
         api_response = self._options.api.endpoint(post_path).post(json=object)
         if api_response.status_code == 201 and api_response.content.data:
             self.raw_object = api_response.content.data
-    
+
     def parse(self, parse_type='json', configuration={}):
         post_path = f'prompt/parse/' + parse_type
         self.configuration = configuration
@@ -160,4 +160,3 @@ class Prompt(ApiModel):
                 'basic_settings': configuration.get('basic_settings', data.get('basic_settings')),
                 'advanced_settings': configuration.get('advanced_settings', data.get('advanced_settings')),
             }
-
