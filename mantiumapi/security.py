@@ -162,7 +162,6 @@ class Action(ApiModel):
 
 
 class PromptPolicy(ApiModel):
-
     class Meta:
-        type = "prompt_policy"
+        type = 'prompt_policy'
         api = orm_api
