@@ -1,8 +1,9 @@
 import unittest
 from unittest import mock
 
-import mantiumapi.execute
 import mantiumapi.intelet
+import mantiumapi.execute
+
 
 INTELET = {
     'data': {
@@ -93,17 +94,23 @@ def mocked_requests(*args, **kwargs):
 
         def json(self):
             return self.json_data
-
-    if args[0] == 'GET' and args[1] == 'https://api.mantiumai.com/v1/intelet/7a2ccb00-85c0-4d70-bf98-779524a73e0f':
+    
+    if (
+        args[0] == 'GET'
+        and args[1]
+        == 'https://api.mantiumai.com/v1/intelet/7a2ccb00-85c0-4d70-bf98-779524a73e0f'
+    ):
         return MockResponse(INTELET, 200)
     elif (
         args[0] == 'GET'
-        and args[1] == 'https://api.mantiumai.com/v1/intelet/result/c638ce5f-67e2-4d99-8d28-b1535f41e55d'
+        and args[1]
+        == 'https://api.mantiumai.com/v1/intelet/result/c638ce5f-67e2-4d99-8d28-b1535f41e55d'
     ):
         return MockResponse(INTELET_EXECUTE_RESULT, 200)
     elif (
         args[0] == 'POST'
-        and args[1] == 'https://api.mantiumai.com/v1/intelet/7a2ccb00-85c0-4d70-bf98-779524a73e0f/execute'
+        and args[1]
+        == 'https://api.mantiumai.com/v1/intelet/7a2ccb00-85c0-4d70-bf98-779524a73e0f/execute'
     ):
         return MockResponse(INTELET_EXECUTE, 200)
     else:
@@ -115,7 +122,9 @@ def mocked_requests(*args, **kwargs):
     side_effect=mocked_requests,
 )
 def test_intelet(mock_get):
-    target = mantiumapi.intelet.Intelet.from_id('7a2ccb00-85c0-4d70-bf98-779524a73e0f')
+    target = mantiumapi.intelet.Intelet.from_id(
+        '7a2ccb00-85c0-4d70-bf98-779524a73e0f'
+    )
     assert isinstance(target, mantiumapi.intelet.Intelet)
     assert target.name == 'Test Intelet'
     assert target.intelet_id == '7a2ccb00-85c0-4d70-bf98-779524a73e0f'
@@ -131,9 +140,13 @@ def test_intelet(mock_get):
     side_effect=mocked_requests,
 )
 def test_intelet_execute(mock_post):
-    target = mantiumapi.intelet.Intelet.from_id('7a2ccb00-85c0-4d70-bf98-779524a73e0f')
+    target = mantiumapi.intelet.Intelet.from_id(
+        '7a2ccb00-85c0-4d70-bf98-779524a73e0f'
+    )
     target_result = target.execute('test input')
-    assert isinstance(target_result, mantiumapi.execute.InteletExecution)
+    assert isinstance(
+        target_result, mantiumapi.execute.InteletExecution
+    )
     assert target_result.intelet_execution_id == 'c638ce5f-67e2-4d99-8d28-b1535f41e55d'
     assert target_result.intelet_id == '7a2ccb00-85c0-4d70-bf98-779524a73e0f'
     assert target_result.status == 'QUEUED'
@@ -150,3 +163,6 @@ def test_intelet_execute(mock_post):
         '4b823574-f963-45d4-9e17-1f26bdd612e0',
     ]
     assert target_result.executed_prompts[0].status == 'COMPLETED'
+
+
+

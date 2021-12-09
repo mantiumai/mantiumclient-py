@@ -16,9 +16,9 @@
 # Please refer to our terms for more information:
 #     https://mantiumai.com/terms-of-use/
 #
+from .client import orm_api
 from jsonapi_requests.orm import ApiModel, AttributeField, repositories
 
-from .client import orm_api
 
 
 class AiMethod(ApiModel):

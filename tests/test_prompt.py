@@ -99,16 +99,22 @@ def mocked_requests(*args, **kwargs):
         def json(self):
             return self.json_data
 
-    if args[0] == 'GET' and args[1] == 'https://api.mantiumai.com/v1/prompt/9001cf88-eaec-485c-8fcd-1d9fe3ba0ac4':
+    if (
+        args[0] == 'GET'
+        and args[1]
+        == 'https://api.mantiumai.com/v1/prompt/9001cf88-eaec-485c-8fcd-1d9fe3ba0ac4'
+    ):
         return MockResponse(PROMPT, 200)
     elif (
         args[0] == 'GET'
-        and args[1] == 'https://api.mantiumai.com/v1/prompt/result/23d8a134-0fee-4da5-a1ae-c78ea569d0ed'
+        and args[1]
+        == 'https://api.mantiumai.com/v1/prompt/result/23d8a134-0fee-4da5-a1ae-c78ea569d0ed'
     ):
         return MockResponse(PROMPT_EXECUTE_RESULT, 200)
     elif (
         args[0] == 'POST'
-        and args[1] == 'https://api.mantiumai.com/v1/prompt/9001cf88-eaec-485c-8fcd-1d9fe3ba0ac4/execute'
+        and args[1]
+        == 'https://api.mantiumai.com/v1/prompt/9001cf88-eaec-485c-8fcd-1d9fe3ba0ac4/execute'
     ):
         return MockResponse(PROMPT_EXECUTE, 200)
     else:
@@ -120,7 +126,9 @@ def mocked_requests(*args, **kwargs):
     side_effect=mocked_requests,
 )
 def test_prompt(mock_get):
-    target = mantiumapi.prompt.Prompt.from_id('9001cf88-eaec-485c-8fcd-1d9fe3ba0ac4')
+    target = mantiumapi.prompt.Prompt.from_id(
+        '9001cf88-eaec-485c-8fcd-1d9fe3ba0ac4'
+    )
     assert isinstance(target, mantiumapi.prompt.Prompt)
     assert target.name == 'Test Prompt'
     assert target.prompt_id == '9001cf88-eaec-485c-8fcd-1d9fe3ba0ac4'
@@ -134,23 +142,23 @@ def test_prompt(mock_get):
     assert target.default_engine == 'davinci'
     assert target.status == 'ACTIVE'
     assert target.prompt_parameters == {
-        'basic_settings': {
-            'top_p': '1',
-            'stop_seq': ['\n'],
-            'max_tokens': '128',
-            'temperature': '1',
-            'presence_penalty': '0',
-            'frequency_penalty': '0',
-        },
-        'advanced_settings': {
-            'n': '1',
-            'echo': 'false',
-            'stream': 'false',
-            'best_of': 1,
-            'logprobs': '1',
-            'logit_bias': [],
-        },
-    }
+                'basic_settings': {
+                    'top_p': '1',
+                    'stop_seq': ['\n'],
+                    'max_tokens': '128',
+                    'temperature': '1',
+                    'presence_penalty': '0',
+                    'frequency_penalty': '0',
+                },
+                'advanced_settings': {
+                    'n': '1',
+                    'echo': 'false',
+                    'stream': 'false',
+                    'best_of': 1,
+                    'logprobs': '1',
+                    'logit_bias': [],
+                },
+            }
 
 
 @mock.patch(
@@ -158,7 +166,9 @@ def test_prompt(mock_get):
     side_effect=mocked_requests,
 )
 def test_prompt_execute(mock_post):
-    target = mantiumapi.prompt.Prompt.from_id('9001cf88-eaec-485c-8fcd-1d9fe3ba0ac4')
+    target = mantiumapi.prompt.Prompt.from_id(
+        '9001cf88-eaec-485c-8fcd-1d9fe3ba0ac4'
+    )
     target_result = target.execute('test input')
     assert target_result.prompt_execution_id == '23d8a134-0fee-4da5-a1ae-c78ea569d0ed'
     assert target_result.prompt_id == '9001cf88-eaec-485c-8fcd-1d9fe3ba0ac4'
@@ -169,3 +179,6 @@ def test_prompt_execute(mock_post):
     assert target_result.reason == ''
     assert target_result.hitl_info == 'null'
     assert target_result.warning_message == ''
+
+
+
