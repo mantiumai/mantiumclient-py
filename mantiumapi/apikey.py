@@ -16,13 +16,14 @@
 # Please refer to our terms for more information:
 #     https://mantiumai.com/terms-of-use/
 #
-from jsonapi_requests.orm import ApiModel, AttributeField
-
 from .client import orm_api
+from jsonapi_requests.orm import ApiModel, AttributeField
 
 
 class APIKey(ApiModel):
-    """ """
+    """
+
+    """
 
     class Meta:
         type = 'api_key'
@@ -38,7 +39,7 @@ class APIKey(ApiModel):
     @classmethod
     def validate(cls, api_key, ai_provider):
         verify_path = f'provider/verify_key/{ai_provider}'
-        api_response = orm_api.endpoint(verify_path).post(json={'api_key': api_key})
+        api_response = orm_api.endpoint(verify_path).post(json={"api_key":api_key})
         if api_response.status == 200:
             return True
         else:
@@ -46,7 +47,7 @@ class APIKey(ApiModel):
 
     def create(self):
         save_path = f'provider/save_key/{self.ai_provider}'
-        api_response = orm_api.endpoint(save_path).post(json={'api_key': self.api_key})
+        api_response = orm_api.endpoint(save_path).post(json={"api_key":self.api_key})
         if api_response.status_code == 201:
             self.raw_object = api_response.content.data
 
@@ -58,4 +59,6 @@ class APIKey(ApiModel):
 
     def delete(self):
         delete_path = f'provider/delete_key/{self.ai_provider}'
-        orm_api.endpoint(delete_path).post(json={'api_key': self.api_key})
+        orm_api.endpoint(delete_path).post(json={"api_key":self.api_key})
+
+    
