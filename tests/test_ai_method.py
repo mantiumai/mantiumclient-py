@@ -3,59 +3,6 @@ from unittest import mock
 
 from mantiumapi import AiMethod
 
-
-def mocked_requests(*args, **kwargs):
-    class MockResponse:
-        def __init__(self, data, status_code):
-            self.content = data
-            self.json_data = data
-            self.status_code = status_code
-
-        def json(self):
-            return self.json_data
-
-    if args[0] == 'GET' and args[1] == 'https://api.mantiumai.com/v1/ai_methods/openai':
-        return MockResponse(AI_METHODS, 200)
-
-
-class AiEnginesTests(unittest.TestCase):
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
-
-    @mock.patch(
-        'jsonapi_requests.request_factory.requests.request',
-        side_effect=mocked_requests,
-    )
-    def test_ai_method(self, mock_get):
-        target = AiMethod.get_list(provider='openai')
-        self.assertIsInstance(target[0], AiMethod)
-        self.assertEqual(target[0].type, 'ai_method')
-        self.assertEqual(target[0].name, 'answers')
-        self.assertEqual(target[0].api_name, 'answers')
-        self.assertEqual(target[0].description, 'Returns answers')
-        self.assertEqual(target[0].shareable, 'true')
-        self.assertEqual(target[0].endpoint_url, 'https://api.openai.com/v1/answers')
-        self.assertDictEqual(
-            target[0].ai_provider, dict({'name': 'OpenAI', 'description': 'OpenAI -- https://openai.org'})
-        )
-        self.assertDictEqual(
-            target[0].ai_engines[0],
-            dict(
-                {
-                    'name': 'cursing-filter-v6',
-                    'status': 'READY',
-                    'use_cases': '',
-                    'description': '',
-                    'ai_engine_id': '78399e12-fa98-4dd5-8800-2fc41b28033f',
-                    'cost_ranking': 0,
-                },
-            ),
-        )
-
-
 AI_METHODS = {
     'data': [
         {
@@ -95,3 +42,43 @@ AI_METHODS = {
     'meta': {},
     'links': {'total_items': 4, 'current_page': 1},
 }
+
+
+def mocked_requests(*args, **kwargs):
+    class MockResponse:
+        def __init__(self, data, status_code):
+            self.content = data
+            self.json_data = data
+            self.status_code = status_code
+
+        def json(self):
+            return self.json_data
+
+    if args[0] == 'GET' and args[1] == 'https://api.mantiumai.com/v1/ai_methods/openai':
+        return MockResponse(AI_METHODS, 200)
+
+
+@mock.patch(
+    'jsonapi_requests.request_factory.requests.request',
+    side_effect=mocked_requests,
+)
+def test_ai_method(mock_get):
+    target = AiMethod.get_list(provider='openai')
+    assert isinstance(target[0], AiMethod)
+    assert target[0].type == 'ai_method'
+    assert target[0].name == 'answers'
+    assert target[0].api_name == 'answers'
+    assert target[0].description == 'Returns answers'
+    assert target[0].shareable == 'true'
+    assert target[0].endpoint_url == 'https://api.openai.com/v1/answers'
+    assert target[0].ai_provider == {
+        'name': 'OpenAI', 'description': 'OpenAI -- https://openai.org'
+    }
+    assert target[0].ai_engines[0] == {
+        'name': 'cursing-filter-v6',
+        'status': 'READY',
+                'use_cases': '',
+                'description': '',
+                'ai_engine_id': '78399e12-fa98-4dd5-8800-2fc41b28033f',
+                'cost_ranking': 0
+    }
