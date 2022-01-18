@@ -1,4 +1,4 @@
-import unittest
+
 from unittest import mock
 
 from mantiumapi import AiMethod
