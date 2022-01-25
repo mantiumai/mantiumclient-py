@@ -23,7 +23,7 @@ from .log import Log
 from .execute import PromptExecution, InteletExecution
 from .ai_engines import AiEngine
 from .ai_methods import AiMethod
-from .files import Files
+from .files import OpenAIFiles
 from .apikey import APIKey
 from .security import Policy, Rule, Action
 from jsonapi_requests.data import (
@@ -39,19 +39,20 @@ from jsonapi_requests import data
 
 __all__ = [
     'Prompt',
-    'Tag', 
-    'Intelet', 
-    'Log', 
-    'PromptExecution', 
-    'InteletExecution', 
+    'Tag',
+    'Intelet',
+    'Log',
+    'PromptExecution',
+    'InteletExecution',
     'AiEngine',
     'AiMethod',
     'Files',
     'APIKey',
     'Policy',
     'Rule',
-    'Action'
-    ]
+    'Action',
+    'OpenAIFiles'
+]
 
 
 class MJsonApiResponse(Record):

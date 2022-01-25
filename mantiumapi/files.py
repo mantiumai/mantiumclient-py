@@ -23,10 +23,10 @@ from .client import orm_api
 from jsonapi_requests.orm import ApiModel, AttributeField
 
 
-class Files(ApiModel):
+class OpenAIFiles(ApiModel):
     class Meta:
         type = 'openai_file'
-        path = 'files'
+        path = 'files/openai_files'
         api = orm_api
 
     organization = AttributeField('organization')
@@ -37,12 +37,21 @@ class Files(ApiModel):
         pass
 
     @classmethod
+    def get_list(cls, **kwargs):
+        if 'params' in kwargs:
+            if not 'file_type' in kwargs['params']:
+                kwargs['params']['file_type'] = 'FILES_ONLY'
+        else:
+            kwargs['params'] = {'file_type': 'FILES_ONLY'}
+        response = cls._options.api.endpoint(cls.endpoint_path()).get(**kwargs)
+        return cls.from_response_content(response.content)
+
+    @classmethod
     def from_response_content(cls, jsonapi_response):
         result = []
-        # maybe check if files > 1, if so then just return 1 object
         try:
             for object in jsonapi_response.data.attributes['files']:
-                new = File(**object)
+                new = OpenAIFile(**object)
                 result.append(new)
         except KeyError:
             pass
@@ -78,14 +87,18 @@ class Files(ApiModel):
 
     @classmethod
     def delete(cls, id):
-        delete_endpoint = f'files/{id}'
+        delete_endpoint = f'files/openai_files/{id}'
         orm_api.endpoint(delete_endpoint).delete()
-       
 
-class File:
+
+class OpenAIFile:
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
     def delete(self):
-        Files.delete(self.id)
+        OpenAIFiles.delete(self.id)
+
+
+class FinetuneFile:
+    pass
