@@ -46,7 +46,7 @@ In order to protect the moderation team from abuse and burnout, we reserve the r
 
 ### **Reporting**
 
-If you are being harassed by any Mantium community member, including members of staff, notice that someone else is being harassed, or have any other concerns, please contact the Mantium moderators at [email@mantiumai.com]. If the person who is harassing you is on the team, they will recuse themselves from handling your incident. We will respond as promptly as we can.
+If you are being harassed by any Mantium community member, including members of staff, notice that someone else is being harassed, or have any other concerns, please contact the Mantium moderators. If the person who is harassing you is on the team, they will recuse themselves from handling your incident. We will respond as promptly as we can.
 
 This code of conduct applies to Mantium spaces, but if you are being harassed by a member of Mantium outside our spaces, we still want to know about it. We will take all good-faith reports of harassment by Mantium members (including and especially moderators) seriously. This includes harassment outside our spaces and harassment prior to becoming a Mantium community member. Mantium moderators reserve the right to vet users based on their past behavior, including behavior outside Mantium spaces and behavior towards people who are not in the Mantium community.
 
