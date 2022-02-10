@@ -21,6 +21,19 @@ from jsonapi_requests.orm import ApiModel, AttributeField
 
 
 class AiEngine(ApiModel):
+    """Mantium AiEngine Endpoint
+
+    This module lists AI Engines available via the Mantium API.
+
+    Available methods:
+    get_list() : returns a list of all available AI engines
+    from_id(id: str) : returns an AI engine from engine id value (accessible in engine_id_values.py)
+    from_provider(provider: str) : returns all AI engines available by provider (Cohere, AI21, OpenAI, Mantium) > CASE SENSITIVE
+
+    Example:
+        >>> ai_engines = AiEngine.get_list()
+    """
+
     class Meta:
         type = 'ai_engine'
         api = orm_api

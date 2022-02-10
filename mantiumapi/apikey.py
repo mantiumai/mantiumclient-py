@@ -22,6 +22,19 @@ from jsonapi_requests.orm import ApiModel, AttributeField
 
 class APIKey(ApiModel):
     """
+    Mantium API Key Endpoint.
+
+    Must be used with a valid ai_provider and api_key attribute. To set:
+        >>> api_key = APIKey()
+        >>> api_key.ai_provider = provider: str
+        >>> api_key.api_key = your_api_key: str
+
+    Available methods:
+    validate(api_key: str, ai_provider: str) : validate if the set API key is valid -> bool
+    create() : create and save Provider API Key
+    update() : currently functions as .create()
+    save() : currently functions as .create()
+    delete() : delete API from stored Provider endpoint
 
     """
 
@@ -30,7 +43,7 @@ class APIKey(ApiModel):
         path = 'provider/api_keys'
         api = orm_api
 
-    ai_provider = AttributeField('ai_provider')
+    ai_provider = AttributeField(('ai_provider').lower())
     api_key = AttributeField('api_key')
     verified = AttributeField('verified')
     created = AttributeField('created')
@@ -39,15 +52,15 @@ class APIKey(ApiModel):
     @classmethod
     def validate(cls, api_key, ai_provider):
         verify_path = f'provider/verify_key/{ai_provider}'
-        api_response = orm_api.endpoint(verify_path).post(json={"api_key":api_key})
-        if api_response.status == 200:
+        api_response = orm_api.endpoint(verify_path).post(json={'api_key': api_key})
+        if api_response.status_code == 200:
             return True
         else:
             return False
 
     def create(self):
         save_path = f'provider/save_key/{self.ai_provider}'
-        api_response = orm_api.endpoint(save_path).post(json={"api_key":self.api_key})
+        api_response = orm_api.endpoint(save_path).post(json={'api_key': self.api_key})
         if api_response.status_code == 201:
             self.raw_object = api_response.content.data
 
@@ -59,6 +72,4 @@ class APIKey(ApiModel):
 
     def delete(self):
         delete_path = f'provider/delete_key/{self.ai_provider}'
-        orm_api.endpoint(delete_path).post(json={"api_key":self.api_key})
-
-    
+        orm_api.endpoint(delete_path).post(json={'api_key': self.api_key})

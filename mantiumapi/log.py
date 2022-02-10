@@ -21,6 +21,12 @@ from jsonapi_requests.orm import ApiModel, AttributeField, RelationField
 
 
 class Log(ApiModel):
+    """Mantium API Logs Endpoint
+
+    Available Methods:
+    from_id()
+    get_list() :"""
+
     class Meta:
         type = 'log'
         api = orm_api
