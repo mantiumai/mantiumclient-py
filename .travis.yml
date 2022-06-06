@@ -5,7 +5,7 @@ python:
   - '3.8'
   - '3.9'
 install:
-  - pip install -U importlib_metadata
+  - if [ "$TRAVIS_PYTHON_VERSION" == "3.7" ]; then pip install -U importlib_metadata; fi
   - pip install -r requirements.txt
   - pip install pytest
 script:
